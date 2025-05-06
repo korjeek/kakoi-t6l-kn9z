@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <header>
+        <h1>Создание теста</h1>
+        <nav>
+            <a href="main-page.html">Главная</a> |
+            <a href="create-test.html">Создать тест</a>
+        </nav>
+    </header>
+
+    <section id="create-section">
+        <h2>Создать тест</h2>
+        <form id="quizForm">
+            <input type="text" id="quizTitle" placeholder="Название теста" required>
+            <div id="questionsContainer"></div>
+            <button type="button" onclick="addQuestion()">Добавить вопрос</button>
+            <button type="submit">Сохранить тест</button>
+        </form>
+    </section>
+
+    <script src="../scripts/add-quiz.js"></script>
+</body>
+</html>

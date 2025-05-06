@@ -1,0 +1,21 @@
+﻿.top-nav{
+    height: 80px;
+}
+
+.top-row{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.container-fluid{
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.logo{
+    display: block;
+    position: relative;
+}
