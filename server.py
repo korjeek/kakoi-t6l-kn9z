@@ -1,9 +1,12 @@
 ﻿from flask import Flask, render_template, request, jsonify
+import asyncio
+from db_service import *
 
 app = Flask(__name__)
 
 
 @app.route('/', methods=['GET'])
+@app.route('/main-page.html', methods=['GET'])
 def main_page():
     return render_template('main-page.html')
 
@@ -47,30 +50,33 @@ tests = [
 
 
 @app.route('/tests', methods=['GET'])
-def get_tests():
+async def get_tests():
+    all_tests = await get_all_tests()
+
     return jsonify([
-        {"id": t["id"], "title": t["title"], "description": t["description"]}
-        for t in tests
+        {"id": t["id"], "name": t["name"]}
+        for t in all_tests
     ])
 
-@app.route('/tests/<int:test_id>', methods=['GET'])
-def get_test(test_id):
-    test = next((t for t in tests if t["id"] == test_id), None)
-    if not test:
-        return jsonify({"error": "Тест не найден"}), 404
-    return jsonify({
-        "id": test["id"],
-        "title": test["title"],
-        "description": test["description"]
-    })
 
-@app.route('/tests/<int:test_id>/questions', methods=['GET'])
-def get_questions(test_id):
-    test = next((t for t in tests if t["id"] == test_id), None)
+@app.route('/tests/<int:test_id>', methods=['GET'])
+async def get_test(test_id):
+    test = await get_test_by_id(test_id)
     if not test:
         return jsonify({"error": "Тест не найден"}), 404
-    return jsonify(test["questions"])
+    return test.data
+
+
+# @app.route('/tests/<int:test_id>/questions', methods=['GET'])
+# def get_questions(test_id):
+#     test = next((t for t in tests if t["id"] == test_id), None)
+#     if not test:
+#         return jsonify({"error": "Тест не найден"}), 404
+#     return jsonify(test["questions"])
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    loop.run_until_complete(init_tortoise())
+    app.run(debug=True, use_reloader=False)

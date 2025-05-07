@@ -35,9 +35,10 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             data.forEach(test => {
+                console.log(test)
                 const link = document.createElement("a");
                 link.href = `/tests/${test.id}`;
-                link.textContent = test.title;
+                link.textContent = test.name;
                 link.className = "quiz-link";
 
                 const description = document.createElement("p");
