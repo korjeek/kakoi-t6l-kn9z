@@ -21,3 +21,38 @@ function addAnswer(button) {
     answerInput.required = true;
     answersDiv.appendChild(answerInput);
 }
+
+//GoGa
+document.addEventListener("DOMContentLoaded", function () {
+    const quizList = document.getElementById("quizList");
+
+    fetch('/tests')
+        .then(response => response.json())
+        .then(data => {
+            if (data.length === 0) {
+                quizList.innerHTML = "<p>Нет доступных тестов</p>";
+                return;
+            }
+
+            data.forEach(test => {
+                const link = document.createElement("a");
+                link.href = `/tests/${test.id}`;
+                link.textContent = test.title;
+                link.className = "quiz-link";
+
+                const description = document.createElement("p");
+
+                const div = document.createElement("div");
+                div.className = "quiz-item";
+                div.appendChild(link);
+                div.appendChild(description);
+
+                quizList.appendChild(div);
+            });
+        })
+        .catch(error => {
+            console.error("Ошибка загрузки тестов:", error);
+            quizList.innerHTML = "<p>Не удалось загрузить тесты</p>";
+        });
+});
+//GoGa
