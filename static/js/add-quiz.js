@@ -22,7 +22,6 @@ function addAnswer(button) {
     answersDiv.appendChild(answerInput);
 }
 
-//GoGa
 document.addEventListener("DOMContentLoaded", function () {
     const quizList = document.getElementById("quizList");
 
@@ -35,10 +34,9 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             data.forEach(test => {
-                console.log(test)
                 const link = document.createElement("a");
                 link.href = `/tests/${test.id}`;
-                link.textContent = test.name;
+                link.textContent = `${test.id} ${test.name}`;
                 link.className = "quiz-link";
 
                 const description = document.createElement("p");
@@ -56,4 +54,3 @@ document.addEventListener("DOMContentLoaded", function () {
             quizList.innerHTML = "<p>Не удалось загрузить тесты</p>";
         });
 });
-//GoGa

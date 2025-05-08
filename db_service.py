@@ -1,5 +1,5 @@
-from flask import request, jsonify
-from tortoise import Tortoise, fields
+from flask import jsonify, json
+from tortoise import Tortoise
 from models import Tests
 
 
@@ -10,41 +10,22 @@ async def init_tortoise():
         modules={"models": ["models"]}
     )
     await Tortoise.generate_schemas()
-    test = await Tests(name='Kakoi ti smesharik', data=
-    {
-        "id": 1,
-        "name": "Какой ты князь?",
-        "questions": [
-            {
-                "id": 1,
-                "text": "Как ты решаешь конфликты?",
-                "answers": [
-                    {"text": "Переговорами"},
-                    {"text": "Силой"}
-                ]
-            },
-            {
-                "id": 2,
-                "text": "Как ты управляешь?",
-                "answers": [
-                    {"text": "По законам"},
-                    {"text": "Правила меня не касаются"}
-                ]
-            }
-        ]
-    })
-    await test.save()
+
+    test_file = open('hardcode_tests/knyaz_test.json', encoding="utf-8")
+    json_data = json.load(test_file)
+    initial_test = await Tests(name=json_data['name'], data=json_data)
+    await initial_test.save()
 
 
 async def create_new_test():
     data = request.get_json()
-    new_test = await Tests.create(name=data['name'], data=data['data'])
+    new_test = await Tests.create(name=data['name'], data=data)
 
     return jsonify({"id": new_test.id, "name": new_test.name, "data": new_test.data})
 
 
 async def delete_test_by_id():
-    data = request.get_json()
+    data = request.get_json()  # Мне кажется это не будет работать
     test = await Tests.get_or_none(id=data['id'])
     if test:
         await test.delete()

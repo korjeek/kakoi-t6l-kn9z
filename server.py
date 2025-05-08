@@ -1,58 +1,30 @@
 ﻿from flask import Flask, render_template, request, jsonify
 import asyncio
-from db_service import *
+import db_service as db
 
 app = Flask(__name__)
 
 
 @app.route('/', methods=['GET'])
-@app.route('/main-page.html', methods=['GET'])
+@app.route('/main-page', methods=['GET'])
 def main_page():
     return render_template('main-page.html')
 
 
-@app.get('/create-test.html')
+@app.get('/create-test')
 def get_create_test_page():
     return render_template('create-test.html')
 
 
-@app.post('/create-test.html')
-def create_test():
-    print(request.form)
+@app.post('/create-test')
+async def create_test(test_data):
+    await db.create_new_test()
     return render_template('create-test.html')
-
-
-tests = [
-    {
-        "id": 1,
-        "title": "Какой ты князь?",
-        "description": "Узнай какой ты князь",
-        "questions": [
-            {
-                "id": 1,
-                "text": "Как ты решаешь конфликты?",
-                "answers": [
-                    {"text": "Переговорами"},
-                    {"text": "Силой"}
-                ]
-            },
-            {
-                "id": 2,
-                "text": "Как ты управляешь?",
-                "answers": [
-                    {"text": "По законам"},
-                    {"text": "Правила меня не касаются"}
-                ]
-            }
-        ]
-    }
-]
 
 
 @app.route('/tests', methods=['GET'])
 async def get_tests():
-    all_tests = await get_all_tests()
-
+    all_tests = await db.get_all_tests()
     return jsonify([
         {"id": t["id"], "name": t["name"]}
         for t in all_tests
@@ -61,7 +33,7 @@ async def get_tests():
 
 @app.route('/tests/<int:test_id>', methods=['GET'])
 async def get_test(test_id):
-    test = await get_test_by_id(test_id)
+    test = await db.get_test_by_id(test_id)
     if not test:
         return jsonify({"error": "Тест не найден"}), 404
     return test.data
@@ -78,5 +50,5 @@ async def get_test(test_id):
 if __name__ == '__main__':
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
-    loop.run_until_complete(init_tortoise())
+    loop.run_until_complete(db.init_tortoise())
     app.run(debug=True, use_reloader=False)
