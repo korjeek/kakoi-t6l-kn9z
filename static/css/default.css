@@ -1,0 +1,76 @@
+﻿body{
+    overflow-x: hidden;
+    min-height: 100%;
+    height: 100%;
+    background-color: #f1f4f7;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    font-style: normal;
+    font-weight: 400;
+    color: #5e5e73;
+    margin: 0;
+}
+
+h1{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 30px;
+    color: #5E5C74;
+    margin-bottom: 10px;
+    letter-spacing: 0.02em;
+    line-height: 1.7;
+}
+
+h2{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    color: #1d63ed;
+    margin-top: 0;
+    line-height: 1.5;
+    letter-spacing: 0.02em;
+}
+
+h3{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    color: #8B9DAC;
+    margin-top: 0;
+    line-height: 1.3;
+    letter-spacing: 0.02em;
+}
+
+@media (min-width: 600px) and (max-width: 991px){
+    h1{
+        font-size: 26px;
+        line-height: 1.5;
+    }
+
+    h2{
+        font-size: 18px;
+        line-height: 1.4;
+    }
+}
+
+@media (max-width: 599px){
+    h1{
+        font-size: 22px;
+        line-height: 1.2;
+    }
+
+    h2{
+        font-size: 16px;
+        line-height: 1.2;
+    }
+}
+
+.header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    padding-right: 68px;
+}

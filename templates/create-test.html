@@ -3,25 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <!-- fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <!-- styles -->
+    <link rel="stylesheet" href="../static/css/nav.css">
+    <link rel="stylesheet" href="../static/css/default.css">
+    <link rel="stylesheet" href="../static/css/content.css">
+    <link rel="stylesheet" href="../static/css/create-test.css">
 </head>
 <body>
-    <header>
-        <h1>Создание теста</h1>
-        <nav>
-            <a href="/">Главная</a> |
-            <a href="create-test.html">Создать тест</a>
-        </nav>
-    </header>
+    <nav class="top-nav">
+        <div class="container-fluid">
+            <div class="top-row">
+                <a href="/" class="logo"></a>
+                <a href="/create-test" class="create-test-btn">Создать тест</a>
+            </div>
+        </div>
+    </nav>
 
-    <section id="create-section">
-        <h2>Создать тест</h2>
-        <form id="quizForm" method="post">
-            <input type="text" id="quizTitle" placeholder="Название теста" required>
-            <div id="questionsContainer"></div>
-            <button type="button" onclick="addQuestion()">Добавить вопрос</button>
-            <button type="submit">Сохранить тест</button>
-        </form>
-    </section>
+    <div class="content">
+        <div class="container">
+            <div class="create-test header">
+                <div>
+                    <h1>Создание теста</h1>
+                    <h3>Создайте свой уникальный тест</h3>
+                </div>
+            </div>
+            <form id="test-form" method="post">
+                <h2>Шаг 1: Придумайте название тесту</h2>
+                <input type="text" id="quizTitle" placeholder="Название теста" required>
+
+                <h2>Шаг 2: Создайте теги</h2>
+                <div class="tags-section">
+                    <div class="tags-container" id="tagsContainer"></div>
+                    <div class="add-tag">
+                        <input type="text" id="newTagInput" placeholder="Новый тег">
+                        <button type="button" onclick="addNewTag()">Добавить тег</button>
+                    </div>
+                </div>
+
+                <h2>Шаг 3: Добавьте вопросы и ответы</h2>
+                <div id="questionsContainer"></div>
+                <button type="button" onclick="addQuestion()">Добавить вопрос</button>
+                <button type="submit">Сохранить тест</button>
+            </form>
+        </div>
+    </div>
 
     <script src="../static/js/add-quiz.js"></script>
 </body>

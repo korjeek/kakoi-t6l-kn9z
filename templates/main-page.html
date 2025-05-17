@@ -3,28 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/nav.css') }}">
+    <!-- fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <!-- styles -->
+    <link rel="stylesheet" href="../static/css/nav.css">
+    <link rel="stylesheet" href="../static/css/default.css">
+    <link rel="stylesheet" href="../static/css/content.css">
 </head>
 <body>
-    <header class="header-container">
-        <nav class="top-nav">
-            <div class="container-fluid">
-                <div class="top-row">
-                    <a href="main-page.html" class="logo">Какой ты князь?</a>
-                    <a href="create-test.html">Создать тест</a>
+    <nav class="top-nav">
+        <div class="container-fluid">
+            <div class="top-row">
+                <a href="/" class="logo"></a>
+                <a href="/create-test" class="create-test-btn">Создать тест</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content">
+        <div class="container">
+            <div class="test-list header">
+                <div>
+                    <h1>Тесты онлайн</h1>
+                    <h3>Гога - тесты от Бога</h3>
                 </div>
             </div>
-        </nav>
-    </header>
-    <h1>Какой ты князь?</h1>
-    <p>Самый обычный сайт для создания и прохождения тестов</p>
+            <div class="test-list">
+                <div class="test-list__wrap">
+                    <div class="ajax-list">
 
-    <!-- Список тестов -->
-    <section id="take-section">
-        <h2>Список тестов</h2>
-        <div id="quizList"></div>
-    </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <script src="../static/js/add-quiz.js"></script>
+    <script src="../static/js/tests-list.js"></script>
 </body>
 </html>
