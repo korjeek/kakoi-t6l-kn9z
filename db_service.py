@@ -17,11 +17,9 @@ async def init_tortoise():
     await initial_test.save()
 
 
-async def create_new_test():
-    # data = request.get_json()
-    # new_test = await Tests.create(name=data['name'], data=data)
-    # return jsonify({"id": new_test.id, "name": new_test.name, "data": new_test.data})
-    return "OK"
+async def create_new_test(data):
+    new_test = await Tests.create(title=data['title'], image=data['image'], data=data)
+    return {"id": new_test.id, "title": new_test.title, "data": new_test.data}
 
 
 async def delete_test_by_id():

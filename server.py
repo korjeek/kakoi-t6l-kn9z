@@ -25,9 +25,13 @@ def get_test_runner_page():
 
 
 @app.post('/create-test')
-async def create_test(test_data):
-    await db.create_new_test()
-    return render_template('create-test.html')
+async def create_test():
+    data = request.get_json()
+    try:
+        test_json = await db.create_new_test(data)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    return jsonify({'id': test_json['id']}), 200
 
 
 @app.route('/tests', methods=['GET'])
