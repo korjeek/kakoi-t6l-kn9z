@@ -3,77 +3,54 @@
 <head>
   <meta charset="UTF-8">
   <title>Пройти тест</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 800px;
-      margin: 20px auto;
-      padding: 20px;
-    }
-    .test-header-image {
-      width: 100%;
-      max-height: 300px;
-      object-fit: cover;
-      border-radius: 12px;
-      margin-bottom: 20px;
-    }
-    .question-card {
-      margin: 20px 0;
-      padding: 15px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-    }
-    .question-image {
-      max-width: 100%;
-      max-height: 300px;
-      margin: 15px 0;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-    .answer-option {
-      margin: 10px 0;
-      padding: 10px;
-      background: #f8f9fa;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .answer-option:hover {
-      background: #e9ecef;
-    }
-    #result {
-      display: none;
-      padding: 20px;
-      background: #f0f2f5;
-      border-radius: 5px;
-      text-align: center;
-    }
-  </style>
+  <link rel="stylesheet" href="../static/css/styles.css">
+  <link rel="stylesheet" href="../static/css/runner.css">
 </head>
 <body>
 <nav>
   <div class="nav-container">
-    <h2>🧩 ТестоКреатор</h2>
+    <a href="/" class="logo">🧩 GGTests</a>
     <div class="nav-links">
       <a href="index.html">Главная</a>
-      <a href="test-creator.html">Создать тест</a>
+      <a href="test-creator.html" aria-current="page">Создать тест</a>
     </div>
   </div>
 </nav>
 
-<div id="test-header">
-  <img id="mainTestImage" class="test-header-image">
-</div>
+<main class="test-runner-container">
+  <!-- Обложка теста -->
+  <div class="test-header">
+    <div class="image-container">
+      <img id="mainTestImage" class="test-header-image">
+    </div>
+  </div>
 
-<div id="test-container">
-  <h1 id="test-title"></h1>
-  <div id="questions-container"></div>
-</div>
+  <!-- Контейнер с вопросами -->
+  <div class="test-content">
+    <h1 id="test-title" class="test-title"></h1>
+    <div id="questions-container" class="questions-flow"></div>
+  </div>
 
-<div id="result">
-  <h2>Ваш результат:</h2>
-  <p id="result-text"></p>
-  <button onclick="restartTest()">Пройти еще раз</button>
-</div>
+  <!-- Блок результата (изначально скрыт) -->
+  <div id="result" class="result-card">
+    <h2 class="result-title">Ваш результат:</h2>
+    <p id="result-text" class="result-text"></p>
+    <div class="result-actions">
+      <button class="btn btn-primary btn-lg" onclick="restartTest()">
+        <svg class="icon" viewBox="0 0 24 24" width="20" height="20">
+          <path fill="currentColor" d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+        </svg>
+        Пройти еще раз
+      </button>
+      <button class="btn btn-secondary btn-lg" onclick="location.href='index.html'">
+        <svg class="icon" viewBox="0 0 24 24" width="20" height="20">
+          <path fill="currentColor" d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"/>
+        </svg>
+        На главную
+      </button>
+    </div>
+  </div>
+</main>
 
 <script>
   let currentTest = null;
@@ -151,9 +128,15 @@
     const randomIndex = Math.floor(Math.random() * resultTraits.length);
     const result = resultTraits[randomIndex];
 
-    document.getElementById('test-container').style.display = 'none';
-    document.getElementById('result').style.display = 'block';
-    document.getElementById('result-text').textContent = result;
+    // Скрываем вопросы и показываем результат
+    const testContent = document.querySelector('.test-content');
+    const resultElement = document.getElementById('result');
+
+    if (testContent) testContent.style.display = 'none';
+    if (resultElement) {
+      resultElement.style.display = 'block';
+      document.getElementById('result-text').textContent = result;
+    }
   }
 
   function restartTest() {
