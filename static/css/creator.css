@@ -1,0 +1,222 @@
+﻿/* Основной контейнер */
+.creator-container {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+}
+
+.creator-title{
+    margin-bottom: 1.5rem;
+}
+
+/* Секции */
+.section {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    margin: 2rem 0;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    color: var(--text-primary);
+}
+
+/* Формы */
+.form-input {
+    width: 100%;
+    padding: 0.875rem 1.25rem;
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 1rem;
+    transition: var(--transition);
+    background: var(--surface);
+}
+
+.form-input:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+select.form-input {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23646c77' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1em;
+}
+
+/* Кнопки */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius);
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    border: 2px solid transparent;
+    font-size: 0.95rem;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+    box-shadow: var(--shadow);
+}
+
+.btn-primary:hover {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+}
+
+.btn-icon {
+    background: var(--primary-light);
+    color: var(--primary);
+    padding: 0.6rem 1.25rem;
+}
+
+.btn-icon:hover {
+    background: var(--primary-light-hover);
+}
+
+.btn-danger {
+    background: var(--error);
+    color: white;
+    padding: 0.5rem 0.9rem;
+}
+
+.btn-danger:hover {
+    background: var(--error-hover);
+}
+
+.add-bottom-btn {
+    width: 100%;
+    justify-content: center;
+}
+
+.btn-sm {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+}
+
+/* Загрузка изображений */
+.image-upload {
+    position: relative;
+    margin-top: 1.5rem;
+}
+
+.question .image-upload{
+    margin-top: 0;
+}
+
+.file-upload {
+    display: inline-flex;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: var(--primary-light);
+    color: var(--primary);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: var(--transition);
+    border: 2px dashed var(--border);
+}
+
+.file-upload:hover {
+    border-color: var(--primary);
+}
+
+.image-preview-container {
+    position: relative;
+    margin-top: 1.5rem;
+    max-width: 600px;
+}
+
+.image-preview {
+    width: 100%;
+    max-height: 400px;
+    object-fit: contain;
+    border-radius: var(--radius);
+    border: 2px solid var(--border);
+    display: none;
+}
+
+.image-preview.loaded {
+    display: block;
+}
+
+.remove-image {
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    background: var(--error);
+    color: white;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    z-index: 1;
+}
+
+.remove-image:hover {
+    transform: scale(1.1);
+}
+
+/* Списки элементов */
+.traits-list,
+.questions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.trait {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    padding: 1rem;
+    background: var(--background);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+}
+
+.question {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 2rem;
+    background: var(--background);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    position: relative;
+}
+
+/* Ответы */
+.answers {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.answer {
+    display: grid;
+    gap: .2rem;
+}
+ 

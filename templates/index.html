@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Главная - Конструктор тестов</title>
+    <link rel="stylesheet" href="../static/css/styles.css">
+    <link rel="stylesheet" href="../static/css/index.css">
+</head>
+<body>
+<nav>
+    <div class="nav-container">
+        <a href="/" class="logo" aria-label="Логотип ТестоКреатор">🧩 GGTests</a>
+        <div class="nav-links">
+            <a href="index.html">Главная</a>
+            <a href="test-creator.html">Создать тест</a>
+        </div>
+    </div>
+</nav>
+
+<div class="tests-container">
+    <header class="page-header">
+        <h1 class="page-title">Доступные тесты</h1>
+        <p class="page-subtitle">Выберите или создайте новый тест</p>
+    </header>
+    <div class="tests-grid" id="testsGrid">
+        <!-- Тесты будут загружены через JS -->
+    </div>
+</div>
+
+<script>
+    function loadTests() {
+        const testsGrid = document.getElementById('testsGrid');
+        const savedTests = JSON.parse(localStorage.getItem('savedTests')) || [];
+
+        if(savedTests.length === 0) {
+            testsGrid.innerHTML = `
+                    <div class="empty-state">
+                        <h3>Тестов пока нет</h3>
+                        <p>Создайте свой первый тест!</p>
+                        <a href="test-creator.html" class="btn btn-primary">Создать тест</a>
+                    </div>
+                `;
+            return;
+        }
+
+        testsGrid.innerHTML = savedTests.map((test, index) => `
+                <div class="test-card">
+                    ${test.mainImage ?
+            `<img src="${test.mainImage}" class="test-image" alt="${test.title}">` :
+            '<div style="height: 200px; background: #eee"></div>'}
+                    <div class="test-content">
+                        <h3 class="test-title">${test.title}</h3>
+                        <div class="test-actions">
+                            <button class="btn btn-primary"
+                                    onclick="location.href='test-runner.html?testIndex=${index}'">
+                                Пройти тест
+                            </button>
+                            <button class="btn btn-danger"
+                                    onclick="deleteTest(${index})">
+                                Удалить
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+    }
+
+    function deleteTest(index) {
+        const savedTests = JSON.parse(localStorage.getItem('savedTests')) || [];
+        savedTests.splice(index, 1);
+        localStorage.setItem('savedTests', JSON.stringify(savedTests));
+        loadTests();
+    }
+
+    // Загрузка тестов при открытии страницы
+    window.onload = loadTests;
+</script>
+</body>
+</html>

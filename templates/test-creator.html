@@ -1,0 +1,311 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Простой конструктор тестов</title>
+  <link rel="stylesheet" href="../static/css/styles.css">
+  <link rel="stylesheet" href="../static/css/creator.css">
+</head>
+<body>
+<nav>
+  <div class="nav-container">
+    <a href="/" class="logo">🧩 GGTests</a>
+    <div class="nav-links">
+      <a href="index.html">Главная</a>
+      <a href="test-creator.html" aria-current="page">Создать тест</a>
+    </div>
+  </div>
+</nav>
+
+<main class="creator-container">
+  <section class="section">
+    <h1 class="creator-title">Создание теста</h1>
+    <input type="text" id="testTitle" class="form-input" placeholder="Название теста">
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">Обложка теста</h2>
+    <div class="image-upload">
+      <label class="file-upload">
+        <input type="file" id="mainImage" accept="image/*">
+      </label>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">Характеристики</h2>
+    </div>
+    <div id="traits" class="traits-list"></div>
+    <button class="btn btn-icon add-bottom-btn" onclick="addTrait()">
+      <span>+</span> Добавить характеристику
+    </button>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">Вопросы</h2>
+    </div>
+    <div id="questions" class="questions-list"></div>
+    <button class="btn btn-icon add-bottom-btn" onclick="addQuestion()">
+      <span>+</span> Добавить вопрос
+    </button>
+  </section>
+
+  <div class="actions">
+    <button class="btn btn-primary btn-lg" onclick="saveTest()">💾 Сохранить тест</button>
+    <div id="error-messages" class="error-message"></div>
+  </div>
+</main>
+
+<script>
+  let traitsList = [];
+  let mainImageBase64 = '';
+
+  // Обработка изображений
+  document.getElementById('mainImage').addEventListener('change', function(e) {
+    handleImageUpload(e.target, document.getElementById('mainImagePreview'));
+  });
+
+  function handleImageUpload(input) {
+    const file = input.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      showError('Пожалуйста, выберите изображение!');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const container = input.closest('.image-upload');
+      let previewContainer = container.querySelector('.image-preview-container');
+
+      if (!previewContainer) {
+        previewContainer = document.createElement('div');
+        previewContainer.className = 'image-preview-container';
+        container.appendChild(previewContainer);
+      }
+
+      let preview = previewContainer.querySelector('.image-preview');
+      if (!preview) {
+        preview = document.createElement('img');
+        preview.className = 'image-preview';
+        previewContainer.appendChild(preview);
+      }
+
+      preview.src = e.target.result;
+      preview.style.display = 'block';
+
+      if (input.id === 'mainImage') {
+        mainImageBase64 = e.target.result;
+      }
+
+      addRemoveButton(previewContainer, input);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function addRemoveButton(container, input) {
+    const existingBtn = container.querySelector('.remove-image');
+    if (existingBtn) existingBtn.remove();
+
+    const removeBtn = document.createElement('button');
+    removeBtn.className = 'remove-image';
+    removeBtn.innerHTML = `
+    <svg viewBox="0 0 24 24" width="18" height="18">
+      <path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+    </svg>
+  `;
+
+    removeBtn.onclick = () => {
+      input.value = '';
+      container.remove();
+      if (input.id === 'mainImage') {
+        mainImageBase64 = '';
+      }
+    };
+
+    container.appendChild(removeBtn);
+  }
+
+  function updateTraitOptions() {
+    console.log('Обновление списков...');
+
+    traitsList = Array.from(document.querySelectorAll('.trait-name'))
+            .map(input => input.value.trim())
+            .filter(name => name !== '');
+
+    const uniqueTraits = [...new Set(traitsList)];
+    if (uniqueTraits.length !== traitsList.length) {
+      showError('Характеристики должны быть уникальными!');
+      return;
+    }
+
+    document.querySelectorAll('.trait-select').forEach(select => {
+      const prevValue = select.value;
+      select.innerHTML = `
+            <option value="">Выберите характеристику</option>
+            ${traitsList.map(trait => `
+                <option value="${trait}">${trait}</option>
+            `).join('')}
+        `;
+      select.value = traitsList.includes(prevValue) ? prevValue : '';
+    });
+  }
+
+  function addTrait() {
+    const traitsDiv = document.getElementById('traits');
+    const newTrait = document.createElement('div');
+    newTrait.className = 'trait';
+    newTrait.innerHTML = `
+    <input type="text" placeholder="Имя характеристики" class="trait-name form-input">
+    <button class="btn btn-danger" onclick="removeElement(this)">
+        <span>×</span>
+        Удалить
+    </button>
+`;
+    traitsDiv.appendChild(newTrait);
+
+    const input = newTrait.querySelector('.trait-name');
+    input.addEventListener('input', () => {
+      clearTimeout(input.timeout);
+      input.timeout = setTimeout(updateTraitOptions, 300);
+    });
+    updateTraitOptions();
+  }
+
+  function addQuestion() {
+    const questionsDiv = document.getElementById('questions');
+    const newQuestion = document.createElement('div');
+    newQuestion.className = 'question';
+    newQuestion.innerHTML = `
+    <div class="image-upload">
+      <label class="file-upload">
+        <input type="file" class="question-image" accept="image/*">
+      </label>
+    </div>
+    <input type="text" placeholder="Текст вопроса" class="question-text form-input">
+    <div class="answers">
+      <div class="answer">
+        <input type="text" placeholder="Ответ" class="answer-text form-input">
+        <select class="trait-select form-input">
+          <option value="">Выберите характеристику</option>
+        </select>
+      </div>
+    </div>
+    <div class="answer-actions">
+      <button class="btn btn-icon" onclick="addAnswer(this)">
+        <span>+</span> Ответ
+      </button>
+      <button class="btn btn-danger" onclick="removeElement(this)">
+        <span>×</span> Удалить вопрос
+      </button>
+    </div>
+  `;
+
+    // Добавляем обработчик для изображения вопроса
+    const imageInput = newQuestion.querySelector('.question-image');
+    imageInput.addEventListener('change', function(e) {
+      handleImageUpload(e.target);
+    });
+
+    questionsDiv.appendChild(newQuestion);
+    updateTraitOptions();
+  }
+
+  function handleQuestionImageUpload(input) {
+    const preview = input.nextElementSibling;
+    const file = input.files[0];
+
+    if (!file.type.startsWith('image/')) {
+      showError('Пожалуйста, выберите изображение!');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      preview.src = e.target.result;
+      preview.style.display = 'block';
+      addRemoveButton(input);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function addAnswer(button) {
+    const answersDiv = button.parentElement.previousElementSibling;
+    const newAnswer = document.createElement('div');
+    newAnswer.className = 'answer';
+    newAnswer.innerHTML = `
+    <input type="text" placeholder="Ответ" class="answer-text form-input">
+    <select class="trait-select form-input">
+      <option value="">Выберите характеристику</option>
+    </select>
+    </div>
+    <button class="btn btn-danger" onclick="removeElement(this)">
+      <span>×</span> Удалить ответ
+    </button>
+  `;
+    answersDiv.appendChild(newAnswer);
+    updateTraitOptions();
+  }
+
+  function removeElement(button) {
+    const element = button.closest('.trait, .question, .answer');
+    if (element) {
+      element.remove();
+      updateTraitOptions();
+    }
+  }
+
+  function saveTest() {
+    const errorMessages = document.getElementById('error-messages');
+    errorMessages.innerHTML = '';
+
+    const testTitle = document.getElementById('testTitle').value;
+    if (!testTitle) return showError('Введите название теста!');
+    if (traitsList.length < 2) return showError('Добавьте минимум 2 характеристики!');
+
+    const questions = Array.from(document.querySelectorAll('.question'));
+    if (questions.length < 1) return showError('Добавьте минимум 1 вопрос!');
+
+    const testData = {
+      title: testTitle,
+      mainImage: mainImageBase64,
+      traits: traitsList,
+      questions: []
+    };
+
+    questions.forEach(question => {
+      const q = {
+        text: question.querySelector('.question-text').value,
+        image: question.querySelector('.question-image-preview').src || '',
+        answers: []
+      };
+
+      const answers = question.querySelectorAll('.answer');
+      answers.forEach(answer => {
+        const answerText = answer.querySelector('.answer-text').value;
+        const trait = answer.querySelector('.trait-select').value;
+
+        if (!answerText) return showError('Заполните все ответы!');
+        if (!trait) return showError('Для всех ответов выберите характеристику!');
+
+        q.answers.push({ text: answerText, trait });
+      });
+
+      testData.questions.push(q);
+    });
+
+    localStorage.setItem('currentTest', JSON.stringify(testData));
+    window.location.href = 'test-runner.html';
+  }
+
+  function showError(message) {
+    const errorDiv = document.getElementById('error-messages');
+    errorDiv.innerHTML = message;
+    throw new Error(message);
+  }
+</script>
+</body>
+</html>
