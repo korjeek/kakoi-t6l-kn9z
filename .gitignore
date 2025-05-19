@@ -161,3 +161,4 @@ cython_debug/
 #.idea/
 
 kny9z-venv
+/nginx/ssl/

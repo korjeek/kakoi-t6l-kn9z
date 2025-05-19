@@ -279,7 +279,7 @@
     questions.forEach(question => {
       const q = {
         text: question.querySelector('.question-text').value,
-        image: question.querySelector('.question-image-preview').src || '',
+        image: (question.querySelector('.image-preview')?.src || ''),
         answers: []
       };
 
