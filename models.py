@@ -5,5 +5,6 @@ from tortoise.models import Model
 # Define an asynchronous Test model
 class Tests(Model):
     id = fields.IntField(primary_key=True, generated=True)
-    name = fields.CharField(50)
+    title = fields.CharField(50)
+    image = fields.TextField()
     data = fields.JSONField()

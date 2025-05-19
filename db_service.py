@@ -13,7 +13,7 @@ async def init_tortoise():
 
     test_file = open('hardcode_tests/knyaz_test.json', encoding="utf-8")
     json_data = json.load(test_file)
-    initial_test = await Tests(name=json_data['name'], data=json_data)
+    initial_test = await Tests(title=json_data['title'], image=json_data['image'], data=json_data)
     await initial_test.save()
 
 
@@ -34,7 +34,7 @@ async def delete_test_by_id():
 
 
 async def get_all_tests():
-    all_tests = await Tests.all().values("id", "name")
+    all_tests = await Tests.all().values("id", "title", "image")
     return all_tests
 
 

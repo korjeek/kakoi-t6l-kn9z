@@ -13,8 +13,14 @@ def main_page():
     return render_template('index.html')
 
 
-@app.get('/create-test')
+@app.get('/test-runner')
 def get_create_test_page():
+    test_id = request.args.get('testId')
+    return render_template('test-runner.html', test_id=test_id)
+
+
+@app.route('/test-creator')
+def get_test_runner_page():
     return render_template('test-creator.html')
 
 
@@ -28,7 +34,7 @@ async def create_test(test_data):
 async def get_tests():
     all_tests = await db.get_all_tests()
     return jsonify([
-        {"id": t["id"], "name": t["name"]}
+        {"id": t["id"], "title": t["title"], "image": t["image"]}
         for t in all_tests
     ])
 
@@ -54,4 +60,4 @@ if __name__ == '__main__':
     asyncio.set_event_loop(loop)
     loop.run_until_complete(db.init_tortoise())
     host = os.getenv('FLASK_RUN_HOST', '127.0.0.1')
-    app.run(debug=True, use_reloader=False, host=host)
+    app.run(debug=True, use_reloader=True, host=host)

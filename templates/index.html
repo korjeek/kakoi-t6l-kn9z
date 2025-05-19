@@ -11,8 +11,8 @@
     <div class="nav-container">
         <a href="/" class="logo" aria-label="Логотип ТестоКреатор">🧩 GGTests</a>
         <div class="nav-links">
-            <a href="index.html">Главная</a>
-            <a href="test-creator.html">Создать тест</a>
+            <a href="/">Главная</a>
+            <a href="/test-creator">Создать тест</a>
         </div>
     </div>
 </nav>
@@ -28,36 +28,32 @@
 </div>
 
 <script>
-    function loadTests() {
+    async function loadTests() {
         const testsGrid = document.getElementById('testsGrid');
-        const savedTests = JSON.parse(localStorage.getItem('savedTests')) || [];
-
+        const savedTests = await fetch('/tests').then(response => response.json()) || [];
+        
         if(savedTests.length === 0) {
             testsGrid.innerHTML = `
                     <div class="empty-state">
                         <h3>Тестов пока нет</h3>
                         <p>Создайте свой первый тест!</p>
-                        <a href="test-creator.html" class="btn btn-primary">Создать тест</a>
+                        <a href="/test-creator" class="btn btn-primary">Создать тест</a>
                     </div>
                 `;
             return;
         }
 
-        testsGrid.innerHTML = savedTests.map((test, index) => `
+        testsGrid.innerHTML = savedTests.map(test => `
                 <div class="test-card">
-                    ${test.mainImage ?
-            `<img src="${test.mainImage}" class="test-image" alt="${test.title}">` :
+                    ${test.image ?
+            `<img src="${test.image}" class="test-image" alt="${test.title}">` :
             '<div style="height: 200px; background: #eee"></div>'}
                     <div class="test-content">
                         <h3 class="test-title">${test.title}</h3>
                         <div class="test-actions">
                             <button class="btn btn-primary"
-                                    onclick="location.href='test-runner.html?testIndex=${index}'">
+                                    onclick="location.href='/test-runner?testId=${test.id}'">
                                 Пройти тест
-                            </button>
-                            <button class="btn btn-danger"
-                                    onclick="deleteTest(${index})">
-                                Удалить
                             </button>
                         </div>
                     </div>
