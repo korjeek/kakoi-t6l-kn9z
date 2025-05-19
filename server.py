@@ -1,4 +1,6 @@
-﻿from flask import Flask, render_template, request, jsonify
+﻿import os
+
+from flask import Flask, render_template, request, jsonify
 import asyncio
 import db_service as db
 
@@ -51,4 +53,5 @@ if __name__ == '__main__':
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     loop.run_until_complete(db.init_tortoise())
-    app.run(debug=True, use_reloader=False)
+    host = os.getenv('FLASK_RUN_HOST', '127.0.0.1')
+    app.run(debug=True, use_reloader=False, host=host)
