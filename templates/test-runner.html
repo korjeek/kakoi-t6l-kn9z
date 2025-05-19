@@ -42,7 +42,7 @@
         </svg>
         Пройти еще раз
       </button>
-      <button class="btn btn-secondary btn-lg" onclick="location.href='index.html'">
+      <button class="btn btn-secondary btn-lg" onclick="location.href='/index'">
         <svg class="icon" viewBox="0 0 24 24" width="20" height="20">
           <path fill="currentColor" d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"/>
         </svg>
@@ -56,7 +56,7 @@
     let currentTest = null;
     let currentQuestion = 0;
     let scores = {};
-
+// TODO заменить /index на /
     async function loadTest() {
         currentTest = await fetch('/tests/{{ test_id }}').then(response => response.json()) || [];
         if (!currentTest) {
