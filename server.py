@@ -8,14 +8,14 @@ app = Flask(__name__)
 
 
 @app.route('/', methods=['GET'])
-@app.route('/main-page', methods=['GET'])
+@app.route('/index', methods=['GET'])
 def main_page():
-    return render_template('main-page.html')
+    return render_template('index.html')
 
 
 @app.get('/create-test')
 def get_create_test_page():
-    return render_template('create-test.html')
+    return render_template('test-creator.html')
 
 
 @app.post('/create-test')
