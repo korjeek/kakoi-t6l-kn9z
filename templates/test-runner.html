@@ -1,0 +1,166 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Пройти тест</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+    }
+    .test-header-image {
+      width: 100%;
+      max-height: 300px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+    .question-card {
+      margin: 20px 0;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    .question-image {
+      max-width: 100%;
+      max-height: 300px;
+      margin: 15px 0;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .answer-option {
+      margin: 10px 0;
+      padding: 10px;
+      background: #f8f9fa;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .answer-option:hover {
+      background: #e9ecef;
+    }
+    #result {
+      display: none;
+      padding: 20px;
+      background: #f0f2f5;
+      border-radius: 5px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+<nav>
+  <div class="nav-container">
+    <h2>🧩 ТестоКреатор</h2>
+    <div class="nav-links">
+      <a href="index.html">Главная</a>
+      <a href="test-creator.html">Создать тест</a>
+    </div>
+  </div>
+</nav>
+
+<div id="test-header">
+  <img id="mainTestImage" class="test-header-image">
+</div>
+
+<div id="test-container">
+  <h1 id="test-title"></h1>
+  <div id="questions-container"></div>
+</div>
+
+<div id="result">
+  <h2>Ваш результат:</h2>
+  <p id="result-text"></p>
+  <button onclick="restartTest()">Пройти еще раз</button>
+</div>
+
+<script>
+  let currentTest = null;
+  let currentQuestion = 0;
+  let scores = {};
+
+  function loadTest() {
+    const testData = localStorage.getItem('currentTest');
+    if (!testData) {
+      alert('Тест не найден! Сначала создайте тест.');
+      window.location.href = 'test-creator.html';
+      return;
+    }
+
+    currentTest = JSON.parse(testData);
+
+    // Загрузка основной картинки
+    if(currentTest.mainImage) {
+      document.getElementById('mainTestImage').src = currentTest.mainImage;
+    }
+
+    currentTest.traits.forEach(trait => scores[trait] = 0);
+    showQuestion(0);
+  }
+
+  function showQuestion(index) {
+    const question = currentTest.questions[index];
+    document.getElementById('test-title').textContent = currentTest.title;
+
+    let imageHTML = '';
+    if(question.image) {
+      imageHTML = `<img src="${question.image}" class="question-image">`;
+    }
+
+    const answersHTML = question.answers.map(answer => `
+      <div class="answer-option" onclick="selectAnswer('${answer.trait}')">
+        ${answer.text}
+      </div>
+    `).join('');
+
+    document.getElementById('questions-container').innerHTML = `
+      <div class="question-card">
+        ${imageHTML}
+        <h3>Вопрос ${index + 1} из ${currentTest.questions.length}</h3>
+        <p>${question.text}</p>
+        <div>${answersHTML}</div>
+      </div>
+    `;
+  }
+
+  function selectAnswer(trait) {
+    scores[trait]++;
+    currentQuestion++;
+
+    if (currentQuestion < currentTest.questions.length) {
+      showQuestion(currentQuestion);
+    } else {
+      showResult();
+    }
+  }
+
+  function showResult() {
+    let maxScore = 0;
+    let resultTraits = [];
+
+    for (const [trait, score] of Object.entries(scores)) {
+      if (score > maxScore) {
+        maxScore = score;
+        resultTraits = [trait];
+      } else if (score === maxScore) {
+        resultTraits.push(trait);
+      }
+    }
+
+    const randomIndex = Math.floor(Math.random() * resultTraits.length);
+    const result = resultTraits[randomIndex];
+
+    document.getElementById('test-container').style.display = 'none';
+    document.getElementById('result').style.display = 'block';
+    document.getElementById('result-text').textContent = result;
+  }
+
+  function restartTest() {
+    window.location.reload();
+  }
+
+  window.onload = loadTest;
+</script>
+</body>
+</html>
