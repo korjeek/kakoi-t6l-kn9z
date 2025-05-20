@@ -193,7 +193,7 @@ function saveTest() {
         .then(response => response.json())
         .then(data => {
             console.log(data)
-            // window.location.href = `/test-runner/${data['id']}`;
+            window.location.href = `/test-runner?testId=${data['id']}`;
         })
         .catch(error => {
             alert(`Непредвиденная ошибка: ${error}, пишите Олегу tg: @korjeeeek`)

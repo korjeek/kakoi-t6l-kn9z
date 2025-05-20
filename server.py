@@ -51,17 +51,9 @@ async def get_test(test_id):
     return test.data
 
 
-# @app.route('/tests/<int:test_id>/questions', methods=['GET'])
-# def get_questions(test_id):
-#     test = next((t for t in tests if t["id"] == test_id), None)
-#     if not test:
-#         return jsonify({"error": "Тест не найден"}), 404
-#     return jsonify(test["questions"])
-
-
 if __name__ == '__main__':
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     loop.run_until_complete(db.init_tortoise())
     host = os.getenv('FLASK_RUN_HOST', '127.0.0.1')
-    app.run(debug=True, use_reloader=True, host=host)
+    app.run(debug=False, use_reloader=False, host=host)

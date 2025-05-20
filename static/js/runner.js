@@ -3,7 +3,9 @@ let currentQuestion = 0;
 let scores = {};
 // TODO заменить /index на /
 async function loadTest() {
-    currentTest = await fetch('/tests/{{ test_id }}').then(response => response.json()) || [];
+    const configDataElement = document.getElementById('config-data');
+    const testId = configDataElement.dataset.testId;
+    currentTest = await fetch(`/tests/${testId}`).then(response => response.json()) || [];
     if (!currentTest) {
         alert('Тест не найден! Сначала создайте тест.');
         window.location.href = '/test-creator';
