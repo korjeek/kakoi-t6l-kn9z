@@ -2,148 +2,54 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Пройти тест</title>
-  <link rel="stylesheet" href="../static/css/styles.css">
-  <link rel="stylesheet" href="../static/css/runner.css">
+  <link rel="stylesheet" href="/static/css/styles.css">
+  <link rel="stylesheet" href="/static/css/runner.css">
 </head>
 <body>
-<nav>
-  <div class="nav-container">
-    <a href="/" class="logo">🧩 GGTests</a>
-    <div class="nav-links">
-      <a href="/index">Главная</a>
-      <a href="/test-creator" aria-current="page">Создать тест</a>
-    </div>
-  </div>
-</nav>
-
-<main class="test-runner-container">
-  <!-- Обложка теста -->
-  <div class="test-header">
-    <div class="image-container">
-      <img id="mainTestImage" class="test-header-image">
-    </div>
-  </div>
-
-  <!-- Контейнер с вопросами -->
-  <div class="test-content">
-    <h1 id="test-title" class="test-title"></h1>
-    <div id="questions-container" class="questions-flow"></div>
-  </div>
-
-  <!-- Блок результата (изначально скрыт) -->
-  <div id="result" class="result-card">
-    <h2 class="result-title">Ваш результат:</h2>
-    <p id="result-text" class="result-text"></p>
-    <div class="result-actions">
-      <button class="btn btn-primary btn-lg" onclick="restartTest()">
-        <svg class="icon" viewBox="0 0 24 24" width="20" height="20">
-          <path fill="currentColor" d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
-        </svg>
-        Пройти еще раз
-      </button>
-      <button class="btn btn-secondary btn-lg" onclick="location.href='/index'">
-        <svg class="icon" viewBox="0 0 24 24" width="20" height="20">
-          <path fill="currentColor" d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"/>
-        </svg>
-        На главную
-      </button>
-    </div>
-  </div>
-</main>
-
-<script>
-    let currentTest = null;
-    let currentQuestion = 0;
-    let scores = {};
-// TODO заменить /index на /
-    async function loadTest() {
-        currentTest = await fetch('/tests/{{ test_id }}').then(response => response.json()) || [];
-        if (!currentTest) {
-            alert('Тест не найден! Сначала создайте тест.');
-            window.location.href = '/test-creator';
-            return;
-        }
-
-        // Загрузка основной картинки
-        if (currentTest.image) {
-            document.getElementById('mainTestImage').src = currentTest.image;
-        }
-
-        currentTest.traits.forEach(trait => scores[trait] = 0);
-        showQuestion(0);
-    }
-
-    function showQuestion(index) {
-        const questions = currentTest.questions[index];
-        document.getElementById('test-title').textContent = currentTest.title;
-
-        let imageHTML = '';
-        if (questions.image) {
-            imageHTML = `<img src="${questions.image}" class="question-image">`;
-        }
-
-        const answersHTML = questions.answers.map(answer => `
-      <div class="answer-option" onclick="selectAnswer('${answer.traits}')">
-        ${answer.text}
+  <nav>
+    <div class="nav-container">
+      <a href="/" class="logo">🧩 GGTests</a>
+      <div class="nav-links">
+        <a href="/">Главная</a>
+        <a href="/test-creator" aria-current="page">Создать тест</a>
       </div>
-    `).join('');
+    </div>
+  </nav>
 
-        document.getElementById('questions-container').innerHTML = `
-      <div class="question-card">
-        ${imageHTML}
-        <h3>Вопрос ${index + 1} из ${currentTest.questions.length}</h3>
-        <p>${questions.text}</p>
-        <div>${answersHTML}</div>
+  <main class="test-runner-container">
+    <div class="test-header">
+      <div class="image-container">
+        <img id="mainTestImage" class="test-header-image" alt="" loading="lazy">
       </div>
-    `;
-    }
+    </div>
 
-    function selectAnswer(traits) {
-        Object.keys(traits).forEach(trait => {
-            scores[trait]++;
-        });
-        currentQuestion++;
+    <div class="test-content">
+      <h1 id="test-title" class="test-title"></h1>
+      <div id="questions-container" class="questions-flow"></div>
+    </div>
 
-        if (currentQuestion < currentTest.questions.length) {
-            showQuestion(currentQuestion);
-        } else {
-            showResult();
-        }
-    }
+    <div id="result" class="result-card" hidden>
+      <h2 class="result-title">Ваш результат:</h2>
+      <p id="result-text" class="result-text"></p>
+      <div class="result-actions">
+        <button class="btn btn-primary btn-lg" onclick="restartTest()" type="button">
+          <svg class="icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+            <path fill="currentColor" d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+          </svg>
+          Пройти еще раз
+        </button>
+        <button class="btn btn-secondary btn-lg" onclick="location.href='/'" type="button">
+          <svg class="icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+            <path fill="currentColor" d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"/>
+          </svg>
+          На главную
+        </button>
+      </div>
+    </div>
+  </main>
 
-    function showResult() {
-        let maxScore = 0;
-        let resultTraits = [];
-
-        for (const [trait, score] of Object.entries(scores)) {
-            if (score > maxScore) {
-                maxScore = score;
-                resultTraits = [trait];
-            } else if (score === maxScore) {
-                resultTraits.push(trait);
-            }
-        }
-
-        const randomIndex = Math.floor(Math.random() * resultTraits.length);
-        const result = resultTraits[randomIndex];
-
-    // Скрываем вопросы и показываем результат
-    const testContent = document.querySelector('.test-content');
-    const resultElement = document.getElementById('result');
-
-    if (testContent) testContent.style.display = 'none';
-    if (resultElement) {
-      resultElement.style.display = 'block';
-      document.getElementById('result-text').textContent = result;
-    }
-  }
-
-    function restartTest() {
-        window.location.reload();
-    }
-
-    window.onload = loadTest;
-</script>
+  <script src="/static/js/runner.js" defer></script>
 </body>
 </html>

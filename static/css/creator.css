@@ -110,6 +110,101 @@ select.form-input {
     font-size: 0.85rem;
 }
 
+.multi-dropdown {
+    position: relative;
+    width: 100%;
+}
+
+.multi-dropdown__button {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    background-color: var(--surface);
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.multi-dropdown__selected {
+    flex-grow: 1;
+    font-size: 1rem;
+    padding: 0.875rem 1.25rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--text-secondary);
+}
+
+.multi-dropdown__search {
+    display: none;
+    width: 100%;
+    padding: 0.875rem 1.25rem;
+    font-size: 14px;
+    box-sizing: border-box;
+    border: none;
+    background: transparent;
+}
+
+.multi-dropdown__search:focus {
+    border: none;
+    outline: none;
+}
+
+.multi-dropdown__arrow {
+    margin: 0 8px;
+    font-size: 12px;
+    color: var(--border);
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+}
+
+.multi-dropdown__arrow.open {
+    transform: rotate(90deg);
+    color: var(--primary);
+}
+
+.multi-dropdown__list {
+    display: none;
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    background-color: var(--surface);
+    box-shadow: var(--shadow);
+}
+
+.multi-dropdown__item {
+    display: flex;
+    align-items: center;
+    padding: 6px 10px;
+    cursor: pointer;
+    user-select: none;
+    gap: .3rem;
+}
+
+.multi-dropdown__item:hover {
+    background-color: var(--primary-light);
+}
+
+.multi-dropdown__item.selected {
+    background-color: #e0f0ff;
+}
+
+.multi-dropdown__item .checkmark {
+    width: 10px;
+    height: 10px;
+    border: 2px solid var(--border);
+    border-radius: 50%;
+    background: transparent;
+    transition: all 0.2s ease;
+    visibility: hidden;
+}
+
+.multi-dropdown__item.selected .checkmark {
+    background: var(--primary);
+    border-color: var(--primary);
+    visibility: visible;
+}
+
 /* Загрузка изображений */
 .image-upload {
     position: relative;
@@ -219,4 +314,3 @@ select.form-input {
     display: grid;
     gap: .2rem;
 }
- 
