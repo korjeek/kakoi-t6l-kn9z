@@ -21,7 +21,12 @@ def get_create_test_page():
 
 
 @app.route('/test-creator')
-def get_test_runner_page():
+def get_test_creator_page():
+    return render_template('test-creator.html')
+
+
+@app.route('/test-editor')
+def get_test_editor_page():
     return render_template('test-creator.html')
 
 
