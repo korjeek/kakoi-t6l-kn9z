@@ -46,10 +46,13 @@ function showQuestion(index) {
     `;
 }
 
-function selectAnswer(traits) {
-    Object.keys(traits).forEach(trait => {
-        scores[trait]++;
+function selectAnswer(traitsString) {
+    const traitsArray = traitsString.split(',').map(trait => trait.trim());
+
+    traitsArray.forEach(trait => {
+        scores[trait] = (scores[trait] || 0) + 1;
     });
+
     currentQuestion++;
 
     if (currentQuestion < currentTest.questions.length) {
