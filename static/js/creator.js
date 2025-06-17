@@ -14,6 +14,32 @@ function scheduleAutoSave() {
     saveTimeout = setTimeout(saveDraft, 1000);
 }
 
+function clearDraft() {
+        localStorage.removeItem(DRAFT_KEY);
+        document.getElementById('testTitle').value = '';
+        document.getElementById('mainImage').value = '';
+        mainImageBase64 = '';
+        const imagePreviews = document.querySelectorAll('.image-preview-container');
+        imagePreviews.forEach(preview => preview.remove());
+        traitsList = [];
+        document.getElementById('traits').innerHTML = '';
+        document.getElementById('questions').innerHTML = '';
+        updateAutosaveStatus('Черновик очищен', true);
+}
+
+function updateAutosaveStatus(message, isSuccess = false) {
+    const status = document.getElementById('autosave-status');
+    if (!status) return;
+
+    status.textContent = message;
+    status.classList.remove('saving');
+
+    if (isSuccess) {
+        status.classList.add('success');
+        setTimeout(() => status.classList.remove('success'), 3000);
+    }
+}
+
 // Сохранение черновика
 function saveDraft() {
     const draft = {
