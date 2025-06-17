@@ -3,6 +3,7 @@
 from flask import Flask, render_template, request, jsonify
 import asyncio
 import db_service as db
+import uuid
 
 app = Flask(__name__)
 
@@ -24,14 +25,36 @@ def get_test_runner_page():
     return render_template('test-creator.html')
 
 
+@app.post('/edit-test')
+async def edit_test():
+    try:
+        test_id = int(request.args.get('testId'))
+        edit_key = uuid.UUID(request.args.get('editKey'))
+    except Exception:
+        return jsonify({'error': 'Invalid test ID or edit key'})
+
+    test_edit_key = await db.get_edit_key_by_test_id(test_id)
+    if test_edit_key is None:
+        return jsonify({'error': 'Test not found'})
+    if edit_key != test_edit_key:
+        return jsonify({'error': 'Edit key does not match'})
+
+    data = request.get_json()
+    try:
+        await db.edit_test_by_id(test_id, data)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    return jsonify({'id': test_id}), 200
+
+
 @app.post('/create-test')
 async def create_test():
     data = request.get_json()
     try:
-        test_json = await db.create_new_test(data)
+        new_test = await db.create_new_test(data)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-    return jsonify({'id': test_json['id']}), 200
+    return jsonify({'id': new_test.data['id'], 'edit_key': f'{new_test.edit_key}'}), 200
 
 
 @app.route('/tests', methods=['GET'])
