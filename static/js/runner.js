@@ -123,6 +123,7 @@ function selectAnswer(traitsString) {
     traitsArray.forEach(trait => {
         scores[trait] = (scores[trait] || 0) + 1;
     });
+
     currentQuestion++;
     saveState(); // Сохраняем состояние после каждого ответа
 
@@ -147,10 +148,10 @@ function showResult() {
         }
     }
 
-
     const randomIndex = Math.floor(Math.random() * resultTraits.length);
     const result = resultTraits[randomIndex];
 
+    // Скрываем вопросы и показываем результат
     const testContent = document.querySelector('.test-content');
     const resultElement = document.getElementById('result');
 
