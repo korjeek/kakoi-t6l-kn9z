@@ -6,6 +6,7 @@ import {clearDraft, loadDraft} from "./draftManager.js";
 import {scheduleAutoSave, updateAutosaveStatus} from "./autoSaveManager.js";
 import {showError} from "./showErrorManager.js";
 import {runTest} from "./runTestManager.js";
+import {parsingTestToSafe} from "./testParsing.js";
 
 clearState();
 window.addTrait = addTrait;
@@ -42,40 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
 function saveTest() {
     const errDiv = document.getElementById('error-messages');
     errDiv.innerHTML = '';
-
-    const title = document.getElementById('testTitle').value;
-    if (!title) return showError('Введите название теста!');
-    if (state.traitsList.length < 2) return showError('Добавьте минимум 2 характеристики!');
-
-    const questions = Array.from(document.querySelectorAll('.question'));
-    if (!questions.length) return showError('Добавьте минимум 1 вопрос!');
-
-    const testData = {
-        title,
-        image: state.mainImageBase64,
-        traits: state.traitsList,
-        questions: []
-    };
-
-    questions.forEach(qEl => {
-        const qObj = {
-            text: qEl.querySelector('.question-text').value,
-            image: (qEl.querySelector('.image-preview')?.src || ''),
-            answers: []
-        };
-        const answers = qEl.querySelectorAll('.answer');
-        answers.forEach(ansEl => {
-            const ansText = ansEl.querySelector('.answer-text').value;
-            if (!ansText) return showError('Заполните все ответы!');
-            const ddEl = ansEl.querySelector('.multi-dropdown');
-            const chosen = Array.from(ddEl.querySelectorAll('.multi-dropdown__item.selected'))
-                .map(it => it.getAttribute('data-value'));
-            if (!chosen.length) return showError('Для всех ответов выберите хотя бы одну характеристику!');
-            qObj.answers.push({text: ansText, traits: chosen});
-        });
-        testData.questions.push(qObj);
-    });
-
+    
+    const testData = parsingTestToSafe();
     fetch('/create-test', {
         method: 'POST',
         headers: {
@@ -86,11 +55,9 @@ function saveTest() {
         .then(response => response.json())
         .then(data => {
             localStorage.removeItem(DRAFT_KEY);
-
             toggleSaveButtons(true);
             setupCopyLinkButton(data['id'], data['edit_key']);
-            state.currentTestId = data['id']
-
+            state.testId = data['id']
             updateAutosaveStatus('Тест сохранен! Ссылка для редактирования готова', true)
         })
         .catch(error => {
