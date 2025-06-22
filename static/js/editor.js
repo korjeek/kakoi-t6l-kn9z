@@ -147,7 +147,7 @@ function populateForm(testData) {
 }
 
 function addRemoveButton(container, input) {
-    const existing = container.querySelector('.remove-image');
+    const existing = container.querySelector('.remove-image-btn');
     if (existing) existing.remove();
     const btn = document.createElement('button');
     btn.className = 'remove-image';

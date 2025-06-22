@@ -1,4 +1,4 @@
-﻿/* Формы */
+﻿/* ======= Формы ======= */
 .form-input {
     width: 100%;
     padding: 0.875rem 1.25rem;
@@ -22,6 +22,8 @@ select.form-input {
     background-position: right 1rem center;
     background-size: 1em;
 }
+
+/* ======= Мульти-дропдаун ======= */
 
 .multi-dropdown {
     position: relative;
@@ -118,6 +120,8 @@ select.form-input {
     visibility: visible;
 }
 
+/* ======= Загрузчик файлов ======= */
+
 .file-upload {
     display: inline-flex;
     align-items: center;
@@ -137,7 +141,6 @@ select.form-input {
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-/* Иконка загрузки через псевдоэлемент */
 .file-upload::before {
     content: "";
     display: block;
@@ -148,7 +151,6 @@ select.form-input {
     transition: transform 0.3s ease;
 }
 
-/* Эффекты при наведении */
 .file-upload:hover {
     background: var(--primary-light-hover);
     border-color: var(--primary);
@@ -160,7 +162,6 @@ select.form-input {
     transform: translateY(-3px);
 }
 
-/* Анимация при клике */
 .file-upload:active {
     transform: translateY(1px);
     box-shadow: 0 1px 2px rgba(0,0,0,0.1);
@@ -181,6 +182,8 @@ select.form-input {
     cursor: pointer;
 }
 
+/* ======= Контейнеры для картинки ======= */
+
 .image-preview-container {
     position: relative;
     margin-top: 1.5rem;
@@ -200,29 +203,7 @@ select.form-input {
     display: block;
 }
 
-.remove-image {
-    position: absolute;
-    top: -12px;
-    right: -12px;
-    background: var(--error);
-    color: white;
-    border: none;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    display: grid;
-    place-items: center;
-    cursor: pointer;
-    box-shadow: var(--shadow);
-    transition: var(--transition);
-    z-index: 1;
-}
-
-.remove-image:hover {
-    transform: scale(1.1);
-}
-
-/* Списки элементов */
+/* ======= Контейнеры для ответов и вопросов ======= */
 .traits-list,
 .questions-list {
     display: flex;
@@ -253,7 +234,6 @@ select.form-input {
     position: relative;
 }
 
-/* Ответы */
 .answers {
     display: flex;
     flex-direction: column;
@@ -262,5 +242,49 @@ select.form-input {
 
 .answer {
     display: grid;
-    gap: .2rem;
+    gap: .3rem;
+}
+
+/* ======= Анимации переходов ======= */
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    position: relative;
+}
+
+.button-group {
+    display: flex;
+    gap: 1rem;
+    transition: all 0.4s ease;
+    align-items: center;
+    height: 100%;
+}
+
+#saveTestBtn, #afterSaveActions {
+    transition:
+        opacity 0.4s ease,
+        transform 0.4s ease;
+}
+
+.actions .fade-out {
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+}
+
+.actions .fade-in {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+/* ======= Контейнер для новых кнопок ======= */
+#afterSaveActions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    height: auto;
 }
