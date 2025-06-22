@@ -6,6 +6,7 @@
     <title>Простой конструктор тестов с мультиселектором</title>
     <link rel="stylesheet" href="/static/css/styles.css">
     <link rel="stylesheet" href="/static/css/creator.css">
+    <link rel="stylesheet" href="/static/css/nav.css">
 </head>
 <body>
     <nav>
@@ -18,7 +19,7 @@
         </div>
     </nav>
 
-    <main class="creator-container">
+    <main class="main-container">
         <section class="section">
             <h1 class="creator-title">Создание теста</h1>
             <input type="text" id="testTitle" class="form-input" placeholder="Название теста" required>
@@ -62,11 +63,18 @@
                 <span aria-hidden="true">🗑️</span>
                 <span class="visually-hidden">Очистить черновик</span>
             </button>
-            <button id="copyLinkBtn" class="btn btn-info btn-lg" hidden>
-                <span aria-hidden="true">📋</span>
-                <span class="btn-text">Копировать ссылку редактирования</span>
-            </button>
             <div id="error-messages" class="error-message" role="alert" hidden></div>
+
+            <div id="afterSaveActions" style="display: none;">
+                <button class="btn btn-success btn-lg" onclick="runTest()" type="button" id="runTestBtn">
+                    <span aria-hidden="true">🚀</span>
+                    <span>Пройти тест</span>
+                </button>
+                <button class="btn btn-info btn-lg" type="button" id="copyLinkBtn">
+                    <span aria-hidden="true">📋</span>
+                    <span class="btn-text">Копировать ссылку на редактирование</span>
+                </button>
+            </div>
         </div>
     </main>
     

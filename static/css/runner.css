@@ -5,7 +5,7 @@
     --background: #f8f9fa;
     --surface: #ffffff;
     --border: #e2e8f0;
-    --text-primary: #1e293b;
+    --text-empty-state-primary: #1e293b;
     --radius: 8px;
     --radius-lg: 12px;
     --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
@@ -36,7 +36,7 @@
 
 .test-title {
     font-size: 2rem;
-    color: var(--text-primary);
+    color: var(--text-empty-state-primary);
     text-align: center;
     margin-bottom: 2rem;
 }
@@ -51,7 +51,7 @@
 }
 
 .question-card h3 {
-    color: var(--text-primary);
+    color: var(--text-empty-state-primary);
     margin-bottom: 1rem;
     font-size: 1.1rem;
     opacity: 0.8;

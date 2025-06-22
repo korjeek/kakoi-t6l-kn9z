@@ -4,9 +4,11 @@
     --surface: #ffffff;
     --background: #f8fafc;
     --border: #e2e8f0;
-    --text-primary: #1e293b;
-    --text-secondary: #64748b;
-    --radius: 0.75rem;
+    --text-primary: #ffffffe6;
+    --text-primary-hover: #ffffff;
+    --text-empty-state-primary: #1e293b;
+    --text-empty-state-secondary: #64748b;
+    --radius: 8px;
     --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --primary-light: #dbeafe;
@@ -31,91 +33,12 @@ body {
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     line-height: 1.5;
     background: var(--background);
-    color: var(--text-primary);
+    color: var(--text-empty-state-primary);
 }
 
-/* Навигация */
-nav {
-    background: var(--primary);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-}
-
-.nav-container {
+/* ======= Контейнер для тестов ======= */
+.main-container {
     max-width: 1200px;
-    margin: 0 auto;
-    padding: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-}
-
-.logo {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: white;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.5rem 1rem;
-    border-radius: var(--radius);
-    transition: var(--transition);
-}
-
-.logo:hover {
-    background: rgba(255, 255, 255, 0.15);
-}
-
-.nav-links {
-    display: flex;
-    gap: 1.5rem;
-    margin-left: auto;
-}
-
-.nav-links a {
-    color: rgba(255, 255, 255, 0.9);
-    text-decoration: none;
-    padding: 0.5rem;
-    position: relative;
-    transition: color 0.3s;
-}
-
-.nav-links a:hover {
-    color: white;
-}
-
-.nav-links a::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: white;
-    transition: width 0.3s;
-}
-
-.nav-links a:hover::after {
-    width: 100%;
-}
-
-@media (max-width: 768px) {
-    .nav-container {
-        flex-direction: column;
-        gap: 1rem;
-    }
-
-    .nav-links {
-        width: 100%;
-        justify-content: space-between;
-        margin-left: 0;
-    }
-
-    .logo {
-        justify-content: center;
-        width: 100%;
-    }
+    margin: 2rem auto;
+    padding: 0 1.5rem;
 }
