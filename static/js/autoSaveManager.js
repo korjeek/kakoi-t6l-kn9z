@@ -19,7 +19,7 @@ export function updateAutosaveStatus(message, isSuccess = false) {
     }
 }
 
-// Сохранение черновика
+
 export function saveDraft() {
     const draft = {
         title: document.getElementById('testTitle').value,

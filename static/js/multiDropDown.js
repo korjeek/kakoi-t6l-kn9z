@@ -6,7 +6,6 @@ export function createMultiDropdown(container) {
 
     const wrapper = document.createElement('div');
     wrapper.className = 'multi-dropdown';
-    // Храним выбранные теги в этом объекте
     wrapper._selectedTags = [];
 
     const button = document.createElement('div');
@@ -38,7 +37,6 @@ export function createMultiDropdown(container) {
     wrapper.appendChild(list);
     container.appendChild(wrapper);
 
-    // Напишем populateList как метод для этого wrapper
     wrapper._populateList = () => {
         list.innerHTML = '';
         const filter = searchInput.value.trim().toLowerCase();
@@ -119,22 +117,18 @@ export function createMultiDropdown(container) {
     document.addEventListener('click', () => {
         if (list.style.display === 'block') toggleDropdown();
     });
-
-    // Инициализировать
+    
     updateButtonText();
     wrapper._populateList();
 }
 
 export function refreshMultiDropdown(container) {
-    // container может быть либо обёртка `.multi-dropdown`, либо обёртка внешнего div
     let wrapper = container;
     if (!wrapper.classList.contains('multi-dropdown')) {
         wrapper = container.querySelector('.multi-dropdown');
     }
     if (!wrapper) return;
-    // если открыт, обновляем фильтрованный список
     const list = wrapper.querySelector('.multi-dropdown__list');
-    const searchInput = wrapper.querySelector('.multi-dropdown__search');
     if (list.style.display === 'block') {
         wrapper._populateList();
     }

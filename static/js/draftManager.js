@@ -18,7 +18,6 @@ export function clearDraft() {
     updateAutosaveStatus('Черновик очищен', true);
 }
 
-// Загрузка черновика
 export function loadDraft() {
     const draft = JSON.parse(localStorage.getItem(DRAFT_KEY));
     if (!draft) return false;

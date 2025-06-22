@@ -1,6 +1,6 @@
-﻿import { state } from "./state.js";
+﻿import {state} from "./state.js";
 import {showError} from "./showErrorManager.js";
-import { refreshMultiDropdown } from "./multiDropDown.js";
+import {refreshMultiDropdown} from "./multiDropDown.js";
 
 export function updateTraitOptions() {
     state.traitsList = Array.from(document.querySelectorAll('.trait-name'))
@@ -10,7 +10,7 @@ export function updateTraitOptions() {
         showError('Характеристики должны быть уникальными!');
         return;
     }
-    // Перерисовать каждую мультиселект-обёртку
+ 
     document.querySelectorAll('.multi-dropdown').forEach(dd => {
         refreshMultiDropdown(dd);
     });

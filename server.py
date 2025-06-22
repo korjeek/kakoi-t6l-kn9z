@@ -23,12 +23,12 @@ def get_create_test_page():
 
 @app.route('/test-creator')
 def get_test_creator_page():
-    return render_template('test-creator.html', scriptName='creator.js')
+    return render_template('test-creator.html', scriptName='creator.js', buttonMode='true')
 
 
 @app.route('/test-editor')
 def get_test_editor_page():
-    return render_template('test-creator.html', scriptName='editor.js')
+    return render_template('test-creator.html', scriptName='editor.js', buttonMode='none')
 
 
 @app.get('/get-test-to-edit')

@@ -1,10 +1,11 @@
-﻿import { DRAFT_KEY } from './constants.js'
-import { state, clearState } from './state.js';
-import { handleImageUpload } from "./handleImageManager.js";
-import { addTrait, addAnswer, addQuestion, removeElement } from "./componentsManager.js";
-import { clearDraft, loadDraft } from "./draftManager.js";
+﻿import {DRAFT_KEY} from './constants.js'
+import {state, clearState} from './state.js';
+import {handleImageUpload} from "./handleImageManager.js";
+import {addTrait, addAnswer, addQuestion, removeElement} from "./componentsManager.js";
+import {clearDraft, loadDraft} from "./draftManager.js";
 import {scheduleAutoSave, updateAutosaveStatus} from "./autoSaveManager.js";
-import { showError } from "./showErrorManager.js";
+import {showError} from "./showErrorManager.js";
+import {runTest} from "./runTestManager.js";
 
 clearState();
 window.addTrait = addTrait;
@@ -20,17 +21,9 @@ document.getElementById('mainImage').addEventListener('change', function (e) {
     handleImageUpload(e.target);
 });
 
-// Автосохранение с дебаунсингом
-
-
-// Вспомогательная функция для обновления текста в дропдауне
-
-
-// Загрузка черновика при загрузке страницы
 document.addEventListener('DOMContentLoaded', () => {
     const afterSave = document.getElementById('afterSaveActions');
 
-    // Устанавливаем начальное состояние
     afterSave.classList.add('fade-out');
     afterSave.style.display = 'none';
 
@@ -40,12 +33,10 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('saveTestBtn').classList.remove('fade-out');
     }
 
-    // Инициализация слушателей для автосохранения
     document.getElementById('testTitle').addEventListener('input', scheduleAutoSave);
     document.querySelector('#traits').addEventListener('input', scheduleAutoSave);
     document.querySelector('#questions').addEventListener('input', scheduleAutoSave);
 });
-
 
 
 function saveTest() {
@@ -108,44 +99,30 @@ function saveTest() {
 }
 
 
-// Функция для переключения между режимами кнопок
 function toggleSaveButtons(showAfterSave = false) {
     const saveBtn = document.getElementById('saveTestBtn');
     const afterSave = document.getElementById('afterSaveActions');
     const actionsContainer = document.querySelector('.actions');
 
-    // Добавляем контейнеру класс для управления высотой
     actionsContainer.classList.add('has-transitions');
 
     if (showAfterSave) {
-        // Начало анимации скрытия
         saveBtn.classList.add('fade-out');
-
-        // Задержка для анимации
         setTimeout(() => {
             saveBtn.style.display = 'none';
-
-            // Показываем новые кнопки
             afterSave.style.display = 'flex';
-
-            // Запускаем анимацию появления
             setTimeout(() => {
                 afterSave.classList.remove('fade-out');
                 afterSave.classList.add('fade-in');
             }, 50);
         }, 400);
     } else {
-        // Анимация скрытия новых кнопок
         afterSave.classList.remove('fade-in');
         afterSave.classList.add('fade-out');
 
         setTimeout(() => {
             afterSave.style.display = 'none';
-
-            // Показываем кнопку сохранения
             saveBtn.style.display = 'flex';
-
-            // Запускаем анимацию появления
             setTimeout(() => {
                 saveBtn.classList.remove('fade-out');
             }, 50);
@@ -153,7 +130,6 @@ function toggleSaveButtons(showAfterSave = false) {
     }
 }
 
-// Функция для копирования ссылки
 function setupCopyLinkButton(testId, editKey) {
     const copyBtn = document.getElementById('copyLinkBtn');
     const btnText = copyBtn.querySelector('.btn-text');
@@ -174,11 +150,4 @@ function setupCopyLinkButton(testId, editKey) {
             showError('Не удалось скопировать ссылку');
         });
     };
-}
-
-// Функция для перехода к прохождению теста
-function runTest() {
-    if (state.currentTestId) {
-        window.location.href = `/test-runner?testId=${state.currentTestId}`;
-    }
 }

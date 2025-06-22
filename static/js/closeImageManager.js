@@ -1,10 +1,10 @@
 ﻿import { state } from "./state.js";
 
 export function addRemoveButton(container, input) {
-    const existing = container.querySelector('.remove-image');
+    const existing = container.querySelector('.remove-image-btn');
     if (existing) existing.remove();
     const btn = document.createElement('button');
-    btn.className = 'remove-image';
+    btn.className = 'remove-image-btn';
     btn.innerHTML = `
       <svg viewBox="0 0 24 24" width="18" height="18">
         <path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 

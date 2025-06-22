@@ -6,7 +6,6 @@
     saveTimeout: null
 };
 
-
 export function clearState() {
     state.traitsList = [];
     state.mainImageBase64 = '';
