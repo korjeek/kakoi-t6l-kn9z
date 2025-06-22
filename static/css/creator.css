@@ -1,12 +1,21 @@
-﻿/* Основной контейнер */
-.creator-container {
-    max-width: 1000px;
-    margin: 2rem auto;
-    padding: 0 1.5rem;
+﻿.creator-title{
+    margin-bottom: 1.5rem;
 }
 
-.creator-title{
-    margin-bottom: 1.5rem;
+.creator-title::after {
+    content: '';
+    position: absolute;
+    bottom: -0.5rem;
+    left: 0;
+    width: 3rem;
+    height: 3px;
+    background: var(--primary);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+.section:hover .creator-title::after {
+    width: 100%;
 }
 
 /* Секции */
@@ -27,7 +36,7 @@
 
 .section-title {
     font-size: 1.5rem;
-    color: var(--text-primary);
+    color: var(--text-empty-state-primary);
 }
 
 /* Формы */
@@ -133,7 +142,7 @@ select.form-input {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: var(--text-secondary);
+    color: var(--text-empty-state-secondary);
 }
 
 .multi-dropdown__search {

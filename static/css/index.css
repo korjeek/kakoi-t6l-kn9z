@@ -1,25 +1,6 @@
-﻿:root {
-    --primary: #2563eb;
-    --primary-hover: #1d4ed8;
-    --background: #f8f9fa;
-    --surface: #ffffff;
-    --border: #e2e8f0;
-    --text-primary: #1e293b;
-    --text-secondary: #64748b;
-    --radius: 8px;
-    --radius-lg: 12px;
-    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
+﻿/* index.css */
 
-/* Главный контейнер */
-.tests-container {
-    max-width: 1200px;
-    margin: 2rem auto;
-    padding: 0 1.5rem;
-}
-
-/* Заголовок страницы */
+/* ======= Контейнер для заголовка страницы ======= */
 .page-header {
     background: var(--surface);
     border-radius: var(--radius-lg);
@@ -30,14 +11,10 @@
     transition: var(--transition);
 }
 
-.page-header:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-}
-
+/* Заголовок страницы */
 .page-title {
     font-size: 2rem;
-    color: var(--text-primary);
+    color: var(--text-empty-state-primary);
     margin-bottom: 0.5rem;
     position: relative;
     display: inline-block;
@@ -56,16 +33,17 @@
 }
 
 .page-header:hover .page-title::after {
-    width: 4rem;
+    width: 100%;
 }
 
+/* Подзаголовок страницы */
 .page-subtitle {
-    color: var(--text-secondary);
+    color: var(--text-empty-state-secondary);
     font-size: 1.1rem;
     margin-top: 0.5rem;
 }
 
-/* Сетка тестов */
+/* ======= Сетка тестов ======= */
 .tests-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -90,6 +68,7 @@
     box-shadow: 0 12px 16px -4px rgba(0, 0, 0, 0.1);
 }
 
+/* Картинка теста */
 .test-image {
     width: 100%;
     height: 200px;
@@ -97,6 +76,7 @@
     border-bottom: 1px solid var(--border);
 }
 
+/* Контейнер для описания теста */
 .test-content {
     padding: 1.5rem;
     flex-grow: 1;
@@ -104,14 +84,15 @@
     flex-direction: column;
 }
 
+/* Назвние теста */
 .test-title {
     font-size: 1.25rem;
-    color: var(--text-primary);
+    color: var(--text-empty-state-primary);
     margin-bottom: 1rem;
     line-height: 1.4;
 }
 
-/* Кнопки действий */
+/* Кнопка "Пройти тест" */
 .test-actions {
     margin-top: auto;
     display: flex;
@@ -135,17 +116,17 @@
 }
 
 .empty-state h3 {
-    color: var(--text-primary);
+    color: var(--text-empty-state-primary);
     margin-bottom: 1rem;
     font-size: 1.5rem;
 }
 
 .empty-state p {
-    color: var(--text-secondary);
+    color: var(--text-empty-state-secondary);
     margin-bottom: 1.5rem;
 }
 
-/* Адаптивность */
+/* ======= Адаптивность ======= */
 @media (max-width: 768px) {
     .page-header {
         padding: 1.5rem;
@@ -164,25 +145,7 @@
     }
 }
 
-@media (max-width: 480px) {
-    .tests-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .page-title {
-        font-size: 1.5rem;
-    }
-
-    .page-subtitle {
-        font-size: 1rem;
-    }
-
-    .test-actions {
-        flex-direction: column;
-    }
-}
-
-/* Дополнения для кнопок */
+/* Основа для кнопок */
 .btn {
     display: inline-flex;
     align-items: center;
@@ -205,4 +168,63 @@
 .btn-primary:hover {
     background: var(--primary-hover);
     transform: translateY(-2px);
+}
+
+@media (max-width: 480px) {
+    .main-container {
+        padding: 0 0.5rem;
+        margin: 1rem auto;
+    }
+
+    .page-header {
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .page-title {
+        font-size: 1.5rem;
+    }
+
+    .page-subtitle {
+        font-size: 1rem;
+    }
+
+    .tests-grid {
+        gap: 1rem;
+        grid-template-columns: 1fr;
+    }
+
+    .test-card {
+        border-radius: var(--radius);
+    }
+
+    .test-image {
+        height: 160px;
+    }
+
+    .test-content {
+        padding: 1rem;
+    }
+
+    .test-actions {
+        flex-direction: column;
+    }
+
+    .test-title {
+        font-size: 1.1rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .test-actions .btn {
+        padding: 0.5rem;
+        font-size: 0.85rem;
+    }
+
+    .empty-state {
+        padding: 1.5rem 1rem;
+    }
+
+    .empty-state h3 {
+        font-size: 1.25rem;
+    }
 }

@@ -403,8 +403,12 @@ function saveTest() {
         .then(data => {
             localStorage.removeItem(DRAFT_KEY);
             console.log(data)
-            setupCopyLinkButton(data.id, data.edit_key);
-            location.href='/';
+            window.location.href = `/test-runner?testId=${data['id']}`;
+
+            toggleSaveButtons(true);
+            setupCopyLinkButton();
+
+            updateAutosaveStatus('Тест сохранен! Ссылка для редактирования готова', true)
         })
         .catch(error => {
             alert(`Непредвиденная ошибка: ${error}, пишите Олегу tg: @korjeeeek`)
@@ -414,7 +418,8 @@ function saveTest() {
 function showError(msg) {
     const ed = document.getElementById('error-messages');
     ed.innerHTML = msg;
-    ed.hidden = false
+    ed.hidden = false;
+    throw new Error(msg);
 }
 
 // =========================
@@ -559,34 +564,40 @@ function refreshMultiDropdown(container) {
     }
 }
 
-function setupCopyLinkButton(testId, editKey) {
+//-----------------------------------------
+// Добавим глобальные переменные для сохранения ID теста и ключа редактирования
+let currentTestId = null;
+let currentEditKey = null;
+
+// Функция для переключения между режимами кнопок
+function toggleSaveButtons(showAfterSave = false) {
+    document.getElementById('saveTestBtn').style.display = showAfterSave ? 'none' : 'block';
+    document.getElementById('afterSaveActions').style.display = showAfterSave ? 'flex' : 'none';
+}
+
+// Функция для копирования ссылки
+function setupCopyLinkButton() {
     const copyBtn = document.getElementById('copyLinkBtn');
     const btnText = copyBtn.querySelector('.btn-text');
     const originalText = btnText.textContent;
 
-    // Формируем ссылку
-    const baseUrl = window.location.origin;
-    const editLink = `${baseUrl}/test-editor?testId=${testId}&editKey=${editKey}`;
-
-    // Показываем кнопку
-    copyBtn.hidden = false;
-
-    // Обработчик клика
-    copyBtn.onclick = async () => {
-        try {
-            await navigator.clipboard.writeText(editLink);
-            btnText.textContent = "Скопировано!";
-
-            copyBtn.querySelector('span').textContent = '✓';
-            copyBtn.classList.add('btn-copied');
-
+    copyBtn.onclick = () => {
+        const url = `${window.location.origin}/test-editor?testId=${currentTestId}&editKey=${currentEditKey}`;
+        navigator.clipboard.writeText(url).then(() => {
+            btnText.textContent = 'Скопировано!';
             setTimeout(() => {
                 btnText.textContent = originalText;
-                copyBtn.querySelector('span').textContent = '📋';
-                copyBtn.classList.remove('btn-copied');
             }, 2000);
-        } catch (err) {
-            showError('Не удалось скопировать ссылку: ' + err.message);
-        }
+        }).catch(err => {
+            console.error('Ошибка копирования: ', err);
+            showError('Не удалось скопировать ссылку');
+        });
     };
+}
+
+// Функция для перехода к прохождению теста
+function runTest() {
+    if (currentTestId) {
+        window.location.href = `/test-runner?testId=${currentTestId}`;
+    }
 }
