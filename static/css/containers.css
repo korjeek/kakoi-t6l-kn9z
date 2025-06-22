@@ -1,0 +1,41 @@
+﻿/* ======= Контейнер для тестов ======= */
+.main-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+}
+
+@media (max-width: 480px) {
+    .main-container {
+        padding: 0 0.5rem;
+        margin: 1rem auto;
+    }
+}
+
+/* ======= Контейнер для заголовка страницы ======= */
+.content-container {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    margin: 2rem 0;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    transition: var(--transition);
+}
+
+.content-container:hover .title::after {
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .content-container {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .content-container {
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+}

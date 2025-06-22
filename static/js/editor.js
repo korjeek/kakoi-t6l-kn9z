@@ -93,7 +93,7 @@ function populateForm(testData) {
                    class="question-text form-input" value="${qData.text}">
             <div class="answers"></div>
             <div class="answer-actions">
-                <button class="btn btn-icon" onclick="addAnswer(this)">
+                <button class="btn btn-secondary" onclick="addAnswer(this)">
                     <span>+</span> Ответ
                 </button>
                 <button class="btn btn-danger" onclick="removeElement(this)">
@@ -309,7 +309,7 @@ function addQuestion() {
         </div>
       </div>
       <div class="answer-actions">
-        <button class="btn btn-icon" onclick="addAnswer(this)">
+        <button class="btn btn-secondary" onclick="addAnswer(this)">
           <span>+</span> Ответ
         </button>
         <button class="btn btn-danger" onclick="removeElement(this)">

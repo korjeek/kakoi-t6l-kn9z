@@ -1,0 +1,55 @@
+﻿/* ======= База кнопки ======= */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius);
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    border: 2px solid transparent;
+}
+
+/* ======= Основная кнопка ======= */
+.btn-primary {
+    background: var(--primary);
+    color: white;
+    box-shadow: var(--shadow);
+}
+
+.btn-primary:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+}
+
+/* ======= Второстепенная кнопка ======= */
+.btn-secondary {
+    background: var(--primary-light);
+    color: var(--primary);
+    padding: 0.6rem 1.25rem;
+}
+
+.btn-secondary:hover {
+    background: var(--primary-light-hover);
+    transform: translateY(-2px);
+}
+
+/* ======= Опасные кнопки ======= */
+.btn-danger {
+    justify-self: start;
+    background: var(--error);
+    color: white;
+    padding: 0.5rem 0.9rem;
+}
+
+.btn-danger:hover {
+    background: var(--error-hover);
+    transform: translateY(-2px);
+}
+
+/* ======= Кнопка добавления ======= */
+.add-bottom-btn {
+    width: 100%;
+    justify-content: center;
+}

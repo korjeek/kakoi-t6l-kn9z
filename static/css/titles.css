@@ -1,0 +1,32 @@
+﻿/* ======= База заголовка ======= */
+.title {
+    color: var(--text-empty-state-primary);
+    position: relative;
+    display: inline-block;
+}
+
+.title::after {
+    content: '';
+    position: absolute;
+    bottom: -0.5rem;
+    left: 0;
+    width: 3rem;
+    height: 3px;
+    background: var(--primary);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+/* ======= Загловок главной страницы ======= */
+
+.main-page-title{
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+/* ======= Загловок страницы создания теста ======= */
+
+.creator-page-title{
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+}
