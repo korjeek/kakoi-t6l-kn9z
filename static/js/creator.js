@@ -1,7 +1,7 @@
 ﻿let traitsList = [];
 let mainImageBase64 = '';
 const DRAFT_KEY = 'test_draft'; // Ключ для сохранения черновика
-
+let currentTestId = null;
 // Обработка изображения
 document.getElementById('mainImage').addEventListener('change', function (e) {
     handleImageUpload(e.target);
@@ -402,11 +402,10 @@ function saveTest() {
         .then(response => response.json())
         .then(data => {
             localStorage.removeItem(DRAFT_KEY);
-            console.log(data)
-            window.location.href = `/test-runner?testId=${data['id']}`;
 
             toggleSaveButtons(true);
-            setupCopyLinkButton();
+            setupCopyLinkButton(data['id'], data['edit_key']);
+            currentTestId = data['id']
 
             updateAutosaveStatus('Тест сохранен! Ссылка для редактирования готова', true)
         })
@@ -566,8 +565,8 @@ function refreshMultiDropdown(container) {
 
 //-----------------------------------------
 // Добавим глобальные переменные для сохранения ID теста и ключа редактирования
-let currentTestId = null;
-let currentEditKey = null;
+// let currentTestId = null;
+// let currentEditKey = null;
 
 // Функция для переключения между режимами кнопок
 function toggleSaveButtons(showAfterSave = false) {
@@ -576,13 +575,13 @@ function toggleSaveButtons(showAfterSave = false) {
 }
 
 // Функция для копирования ссылки
-function setupCopyLinkButton() {
+function setupCopyLinkButton(testId, editKey) {
     const copyBtn = document.getElementById('copyLinkBtn');
     const btnText = copyBtn.querySelector('.btn-text');
     const originalText = btnText.textContent;
 
     copyBtn.onclick = () => {
-        const url = `${window.location.origin}/test-editor?testId=${currentTestId}&editKey=${currentEditKey}`;
+        const url = `${window.location.origin}/test-editor?testId=${testId}&editKey=${editKey}`;
         navigator.clipboard.writeText(url).then(() => {
             btnText.textContent = 'Скопировано!';
             setTimeout(() => {
