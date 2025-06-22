@@ -59,7 +59,7 @@ async def create_test():
         new_test = await db.create_new_test(data)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-    return jsonify({'id': new_test.data['id'], 'edit_key': f'{new_test.edit_key}'}), 200
+    return jsonify({'id': new_test.id, 'edit_key': f'{new_test.edit_key}'}), 200
 
 
 @app.route('/tests', methods=['GET'])
