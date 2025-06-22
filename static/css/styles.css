@@ -35,10 +35,3 @@ body {
     background: var(--background);
     color: var(--text-empty-state-primary);
 }
-
-/* ======= Контейнер для тестов ======= */
-.main-container {
-    max-width: 1200px;
-    margin: 2rem auto;
-    padding: 0 1.5rem;
-}

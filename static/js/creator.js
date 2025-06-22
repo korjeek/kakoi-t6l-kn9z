@@ -28,9 +28,16 @@ document.getElementById('mainImage').addEventListener('change', function (e) {
 
 // Загрузка черновика при загрузке страницы
 document.addEventListener('DOMContentLoaded', () => {
+    const afterSave = document.getElementById('afterSaveActions');
+
+    // Устанавливаем начальное состояние
+    afterSave.classList.add('fade-out');
+    afterSave.style.display = 'none';
+
     const loaded = loadDraft();
     if (loaded) {
         console.log('Черновик восстановлен');
+        document.getElementById('saveTestBtn').classList.remove('fade-out');
     }
 
     // Инициализация слушателей для автосохранения
@@ -103,8 +110,47 @@ function saveTest() {
 
 // Функция для переключения между режимами кнопок
 function toggleSaveButtons(showAfterSave = false) {
-    document.getElementById('saveTestBtn').style.display = showAfterSave ? 'none' : 'block';
-    document.getElementById('afterSaveActions').style.display = showAfterSave ? 'flex' : 'none';
+    const saveBtn = document.getElementById('saveTestBtn');
+    const afterSave = document.getElementById('afterSaveActions');
+    const actionsContainer = document.querySelector('.actions');
+
+    // Добавляем контейнеру класс для управления высотой
+    actionsContainer.classList.add('has-transitions');
+
+    if (showAfterSave) {
+        // Начало анимации скрытия
+        saveBtn.classList.add('fade-out');
+
+        // Задержка для анимации
+        setTimeout(() => {
+            saveBtn.style.display = 'none';
+
+            // Показываем новые кнопки
+            afterSave.style.display = 'flex';
+
+            // Запускаем анимацию появления
+            setTimeout(() => {
+                afterSave.classList.remove('fade-out');
+                afterSave.classList.add('fade-in');
+            }, 50);
+        }, 400);
+    } else {
+        // Анимация скрытия новых кнопок
+        afterSave.classList.remove('fade-in');
+        afterSave.classList.add('fade-out');
+
+        setTimeout(() => {
+            afterSave.style.display = 'none';
+
+            // Показываем кнопку сохранения
+            saveBtn.style.display = 'flex';
+
+            // Запускаем анимацию появления
+            setTimeout(() => {
+                saveBtn.classList.remove('fade-out');
+            }, 50);
+        }, 400);
+    }
 }
 
 // Функция для копирования ссылки
@@ -116,8 +162,11 @@ function setupCopyLinkButton(testId, editKey) {
     copyBtn.onclick = () => {
         const url = `${window.location.origin}/test-editor?testId=${testId}&editKey=${editKey}`;
         navigator.clipboard.writeText(url).then(() => {
-            btnText.textContent = 'Скопировано!';
+            copyBtn.classList.add('btn-copied');
+            btnText.innerHTML = '✓ Скопировано!';
+
             setTimeout(() => {
+                copyBtn.classList.remove('btn-copied')
                 btnText.textContent = originalText;
             }, 2000);
         }).catch(err => {

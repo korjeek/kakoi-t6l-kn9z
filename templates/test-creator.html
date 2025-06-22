@@ -7,11 +7,14 @@
     <link rel="stylesheet" href="/static/css/styles.css">
     <link rel="stylesheet" href="/static/css/creator.css">
     <link rel="stylesheet" href="/static/css/nav.css">
+    <link rel="stylesheet" href="/static/css/containers.css">
+    <link rel="stylesheet" href="/static/css/buttons.css">
+    <link rel="stylesheet" href="/static/css/titles.css">
 </head>
 <body>
     <nav>
         <div class="nav-container">
-            <a href="/" class="logo">🧩 GGTests</a>
+            <a href="/" class="logo">GGTests</a>
             <div class="nav-links">
                 <a href="/">Главная</a>
                 <a href="/test-creator" aria-current="page">Создать тест</a>
@@ -20,13 +23,13 @@
     </nav>
 
     <main class="main-container">
-        <section class="section">
-            <h1 class="creator-title">Создание теста</h1>
+        <section class="content-container">
+            <h1 class="title creator-page-title">Создание теста</h1>
             <input type="text" id="testTitle" class="form-input" placeholder="Название теста" required>
         </section>
 
-        <section class="section">
-            <h2 class="section-title">Обложка теста</h2>
+        <section class="content-container">
+            <h1 class="title creator-page-title">Обложка теста</h1>
             <div class="image-upload">
                 <label class="file-upload">
                     <input type="file" id="mainImage" accept="image/*" aria-label="Загрузить обложку теста">
@@ -34,48 +37,51 @@
             </div>
         </section>
 
-        <section class="section">
+        <section class="content-container">
             <div class="section-header">
-                <h2 class="section-title">Характеристики</h2>
+                <h1 class="title creator-page-title">Характеристики</h1>
             </div>
             <div id="traits" class="traits-list" role="list"></div>
-            <button class="btn btn-icon add-bottom-btn" onclick="addTrait()" type="button" aria-label="Добавить характеристику">
+            <button class="btn btn-secondary add-bottom-btn" onclick="addTrait()" type="button" aria-label="Добавить характеристику">
                 <span aria-hidden="true">+</span> Добавить характеристику
             </button>
         </section>
 
-        <section class="section">
+        <section class="content-container">
             <div class="section-header">
-                <h2 class="section-title">Вопросы</h2>
+                <h1 class="title creator-page-title">Вопросы</h1>
             </div>
             <div id="questions" class="questions-list" role="list"></div>
-            <button class="btn btn-icon add-bottom-btn" onclick="addQuestion()" type="button" aria-label="Добавить вопрос">
+            <button class="btn btn-secondary add-bottom-btn" onclick="addQuestion()" type="button" aria-label="Добавить вопрос">
                 <span aria-hidden="true">+</span> Добавить вопрос
             </button>
         </section>
 
         <div class="actions">
-            <button class="btn btn-primary btn-lg" onclick="saveTest()" type="button" id="saveTestBtn">
-                <span aria-hidden="true">💾</span>
-                <span class="visually-hidden">Сохранить</span>
-            </button>
-            <button class="btn btn-secondary btn-lg" onclick="clearDraft()" type="button">
-                <span aria-hidden="true">🗑️</span>
-                <span class="visually-hidden">Очистить черновик</span>
-            </button>
-            <div id="error-messages" class="error-message" role="alert" hidden></div>
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="saveTest()" type="button" id="saveTestBtn">
+                    <span aria-hidden="true">💾</span>
+                    <span class="visually-hidden">Сохранить</span>
+                </button>
+                <button class="btn btn-danger" onclick="clearDraft()" type="button">
+                    <span aria-hidden="true">🗑️</span>
+                    <span class="visually-hidden">Очистить черновик</span>
+                </button>
+            </div>
 
-            <div id="afterSaveActions" style="display: none;">
-                <button class="btn btn-success btn-lg" onclick="runTest()" type="button" id="runTestBtn">
+            <div id="afterSaveActions" class="button-group">
+                <button class="btn btn-primary" onclick="runTest()" type="button" id="runTestBtn">
                     <span aria-hidden="true">🚀</span>
                     <span>Пройти тест</span>
                 </button>
-                <button class="btn btn-info btn-lg" type="button" id="copyLinkBtn">
+                <button class="btn btn-secondary" type="button" id="copyLinkBtn">
                     <span aria-hidden="true">📋</span>
                     <span class="btn-text">Копировать ссылку на редактирование</span>
                 </button>
             </div>
         </div>
+
+        <div id="error-messages" class="error-message" role="alert" hidden></div>
     </main>
     
     <script type="module" src="/static/js/{{ scriptName }}" defer></script>
