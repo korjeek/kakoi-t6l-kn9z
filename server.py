@@ -1,6 +1,7 @@
 ﻿import os
 
 from flask import Flask, render_template, request, jsonify
+from edit_key_service import check_request
 import asyncio
 import db_service as db
 import uuid
@@ -22,28 +23,31 @@ def get_create_test_page():
 
 @app.route('/test-creator')
 def get_test_creator_page():
-    return render_template('test-creator.html')
+    return render_template('test-creator.html', scriptName='creator.js')
 
 
 @app.route('/test-editor')
 def get_test_editor_page():
-    return render_template('test-creator.html')
+    return render_template('test-creator.html', scriptName='editor.js')
+
+
+@app.get('/get-test-to-edit')
+async def get_test_to_edit():
+    check_dict = await check_request(request)
+    if not check_dict['pass']:
+        return jsonify({'error': check_dict['error']})
+
+    test_id = check_dict['test_id']
+    return (await db.get_test_by_id(test_id)).data
 
 
 @app.post('/edit-test')
 async def edit_test():
-    try:
-        test_id = int(request.args.get('testId'))
-        edit_key = uuid.UUID(request.args.get('editKey'))
-    except Exception:
-        return jsonify({'error': 'Invalid test ID or edit key'})
+    check_dict = await check_request(request)
+    if not check_dict['pass']:
+        return jsonify({'error': check_dict['error']})
 
-    test_edit_key = await db.get_edit_key_by_test_id(test_id)
-    if test_edit_key is None:
-        return jsonify({'error': 'Test not found'})
-    if edit_key != test_edit_key:
-        return jsonify({'error': 'Edit key does not match'})
-
+    test_id = check_dict['test_id']
     data = request.get_json()
     try:
         await db.edit_test_by_id(test_id, data)
@@ -72,7 +76,7 @@ async def get_tests():
 
 
 @app.route('/tests/<int:test_id>', methods=['GET'])
-async def get_test(test_id):
+async def get_test(test_id: int):
     test = await db.get_test_by_id(test_id)
     if not test:
         return jsonify({"error": "Тест не найден"}), 404
@@ -84,4 +88,4 @@ if __name__ == '__main__':
     asyncio.set_event_loop(loop)
     loop.run_until_complete(db.init_tortoise())
     host = os.getenv('FLASK_RUN_HOST', '127.0.0.1')
-    app.run(debug=False, use_reloader=False, host=host)
+    app.run(debug=True, use_reloader=False, host=host)

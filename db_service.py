@@ -45,7 +45,4 @@ async def get_test_by_id(test_id: int) -> Tests | None:
 
 
 async def get_edit_key_by_test_id(test_id: int) -> uuid.UUID | None:
-    try:
-        return uuid.UUID((await Tests.get_or_none(id=test_id).values('edit_key'))['edit_key'])
-    except ValueError:
-        return None
+    return (await Tests.get_or_none(id=test_id).values('edit_key'))['edit_key']
