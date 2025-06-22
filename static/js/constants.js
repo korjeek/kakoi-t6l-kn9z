@@ -1,0 +1,1 @@
+﻿export const DRAFT_KEY = 'test_draft';

@@ -1,9 +1,11 @@
-﻿let traitsList = [];
+﻿import { DRAFT_KEY } from './constants.js';
+import { state, clearState } from './state.js';
+
+let traitsList = [];
 let mainImageBase64 = '';
-const DRAFT_KEY = 'test_draft'; // Ключ для сохранения черновика
 let testId, editKey;
 
-// Обработка изображения
+
 document.getElementById('mainImage').addEventListener('change', function (e) {
     handleImageUpload(e.target);
 });
