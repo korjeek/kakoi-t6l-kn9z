@@ -39,3 +39,19 @@
         margin-bottom: 1rem;
     }
 }
+
+/* ======= Контейнер для теста ======= */
+.test-card {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+}
+
+.test-card:hover .title::after {
+    width: 100%;
+}

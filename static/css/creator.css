@@ -48,7 +48,7 @@ select.form-input {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: var(--text-empty-state-secondary);
+    color: var(--text-secondary-hover);
 }
 
 .multi-dropdown__search {
