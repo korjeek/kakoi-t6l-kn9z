@@ -23,17 +23,16 @@ document.getElementById('mainImage').addEventListener('change', function (e) {
 
 
 document.addEventListener('DOMContentLoaded', async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    state.testId = urlParams.get('testId');
+    state.editKey = urlParams.get('editKey');
+    if (!state.testId || !state.editKey) {
+        showError('Не указан ID теста или ключ редактирования в URL');
+        return;
+    }
+    
     const loaded = loadDraft();
     if (!loaded) {
-        const urlParams = new URLSearchParams(window.location.search);
-        state.testId = urlParams.get('testId');
-        state.editKey = urlParams.get('editKey');
-
-        if (!state.testId || !state.editKey) {
-            showError('Не указан ID теста или ключ редактирования в URL');
-            return;
-        }
-
         try {
             const response = await fetch(`/get-test-to-edit?testId=${state.testId}&editKey=${state.editKey}`);
             if (!response.ok) {
