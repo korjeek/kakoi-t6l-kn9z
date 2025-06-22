@@ -90,11 +90,13 @@ function clearState() {
     localStorage.removeItem('testProgress');
 }
 
-
-
 function showQuestion(index) {
     const questions = currentTest.questions[index];
     document.getElementById('test-title').textContent = currentTest.title;
+
+    // Обновляем прогресс-бар
+    const progress = (index / currentTest.questions.length) * 100;
+    document.getElementById('progress').style.width = `${progress}%`;
 
     let imageHTML = '';
     if (questions.image) {
@@ -130,6 +132,7 @@ function selectAnswer(traitsString) {
     if (currentQuestion < currentTest.questions.length) {
         showQuestion(currentQuestion);
     } else {
+        document.getElementById('progress').style.width = '100%';
         showResult();
         clearState(); // Очищаем после завершения теста
     }

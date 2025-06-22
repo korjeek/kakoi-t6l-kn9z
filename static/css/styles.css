@@ -6,8 +6,8 @@
     --border: #e2e8f0;
     --text-primary: #ffffffe6;
     --text-primary-hover: #ffffff;
-    --text-empty-state-primary: #1e293b;
-    --text-empty-state-secondary: #64748b;
+    --text-secondary: #1e293b;
+    --text-secondary-hover: #64748b;
     --radius: 8px;
     --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -33,5 +33,5 @@ body {
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     line-height: 1.5;
     background: var(--background);
-    color: var(--text-empty-state-primary);
+    color: var(--text-secondary);
 }

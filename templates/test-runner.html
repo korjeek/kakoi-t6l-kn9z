@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Пройти тест</title>
+  <title>GGTests - Прохождение теста</title>
   <link rel="stylesheet" href="/static/css/styles.css">
   <link rel="stylesheet" href="/static/css/runner.css">
   <link rel="stylesheet" href="/static/css/nav.css">
@@ -14,7 +14,7 @@
 <body>
   <nav>
     <div class="nav-container">
-      <a href="/" class="logo">🧩 GGTests</a>
+      <a href="/" class="logo">GGTests</a>
       <div class="nav-links">
         <a href="/">Главная</a>
         <a href="/test-creator" aria-current="page">Создать тест</a>
@@ -22,15 +22,16 @@
     </div>
   </nav>
 
-  <main class="test-runner-container">
-    <div class="test-header">
-      <div class="image-container">
-        <img id="mainTestImage" class="test-header-image" alt="" loading="lazy">
+  <main class="main-container">
+    <div class="test-card">
+      <img id="mainTestImage" class="test-header-image" alt="" loading="lazy">
+      <h1 id="test-title" class="test-title"></h1>
+      <div class="progress-bar">
+        <div id="progress" class="progress"></div>
       </div>
     </div>
 
     <div class="test-content">
-      <h1 id="test-title" class="test-title"></h1>
       <div id="questions-container" class="questions-flow"></div>
     </div>
 
