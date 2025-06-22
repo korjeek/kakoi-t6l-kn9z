@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     try {
-        const response = await fetch(`/get-test-data?testId=${testId}&editKey=${editKey}`);
+        const response = await fetch(`/get-test-to-edit?testId=${testId}&editKey=${editKey}`);
         if (!response.ok) {
             const error = await response.json();
             throw new Error(error.error || 'Ошибка загрузки теста');
@@ -28,7 +28,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const testData = await response.json();
         populateForm(testData);
-        setupCopyLinkButton(testId, editKey);
     } catch (error) {
         showError(error.message);
     }
@@ -197,48 +196,22 @@ function saveTest() {
         },
         body: JSON.stringify(testData),
     })
-    .then(response => {
-        if (!response.ok) {
-            return response.json().then(err => { throw new Error(err.error) });
-        }
-        return response.json();
-    })
-    .then(data => {
-        showError('Тест успешно обновлен!');
-    })
-    .catch(error => {
-        showError('Ошибка сохранения: ' + error.message);
-    });
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(err => {
+                    throw new Error(err.error)
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            showError('Тест успешно обновлен!');
+        })
+        .catch(error => {
+            showError('Ошибка сохранения: ' + error.message);
+        });
 }
 
-// Функция для копирования ссылки
-function setupCopyLinkButton(testId, editKey) {
-    const copyBtn = document.getElementById('copyLinkBtn');
-    const btnText = copyBtn.querySelector('.btn-text');
-    const originalText = btnText.textContent;
-
-    // Формируем ссылку
-    const baseUrl = window.location.origin;
-    const editLink = `${baseUrl}/test-editor?testId=${testId}&editKey=${editKey}`;
-
-    // Показываем кнопку
-    copyBtn.hidden = false;
-
-    // Обработчик клика
-    copyBtn.onclick = async () => {
-        try {
-            await navigator.clipboard.writeText(editLink);
-            btnText.textContent = "Скопировано!";
-
-            // Возвращаем оригинальный текст через 2 секунды
-            setTimeout(() => {
-                btnText.textContent = originalText;
-            }, 2000);
-        } catch (err) {
-            showError('Не удалось скопировать ссылку: ' + err.message);
-        }
-    };
-}
 
 function handleImageUpload(input) {
     const file = input.files[0];
@@ -351,7 +324,7 @@ function removeElement(btn) {
     scheduleAutoSave();
 }
 
-function createMultiDropdown(container) {
+function createMultiDropdown(container){
     container.innerHTML = '';
 
     const wrapper = document.createElement('div');
@@ -495,3 +468,225 @@ function showError(msg) {
     ed.innerHTML = msg;
     ed.hidden = false
 }
+
+
+
+// то что добавлено из creator.js
+
+function updateButtonText(wrapper) {
+    const selectedDisplay = wrapper.querySelector('.multi-dropdown__selected');
+    const chosen = wrapper._selectedTags;
+    selectedDisplay.textContent = chosen.length ? chosen.join(', ') : 'Выберите характеристику';
+}
+
+function updateTraitOptions() {
+    traitsList = Array.from(document.querySelectorAll('.trait-name'))
+        .map(input => input.value.trim()).filter(name => name);
+    const unique = [...new Set(traitsList)];
+    if (unique.length !== traitsList.length) {
+        showError('Характеристики должны быть уникальными!');
+        return;
+    }
+    // Перерисовать каждую мультиселект-обёртку
+    document.querySelectorAll('.multi-dropdown').forEach(dd => {
+        refreshMultiDropdown(dd);
+    });
+}
+
+
+let saveTimeout;
+function scheduleAutoSave() {
+    clearTimeout(saveTimeout);
+    saveTimeout = setTimeout(saveDraft, 1000);
+}
+
+function clearDraft() {
+    localStorage.removeItem(DRAFT_KEY);
+    document.getElementById('testTitle').value = '';
+    document.getElementById('mainImage').value = '';
+    mainImageBase64 = '';
+    const imagePreviews = document.querySelectorAll('.image-preview-container');
+    imagePreviews.forEach(preview => preview.remove());
+    traitsList = [];
+    document.getElementById('traits').innerHTML = '';
+    document.getElementById('questions').innerHTML = '';
+    updateAutosaveStatus('Черновик очищен', true);
+}
+
+function updateAutosaveStatus(message, isSuccess = false) {
+    const status = document.getElementById('autosave-status');
+    if (!status) return;
+
+    status.textContent = message;
+    status.classList.remove('saving');
+
+    if (isSuccess) {
+        status.classList.add('success');
+        setTimeout(() => status.classList.remove('success'), 3000);
+    }
+}
+
+// Сохранение черновика
+function saveDraft() {
+    const draft = {
+        title: document.getElementById('testTitle').value,
+        mainImageBase64: mainImageBase64,
+        traits: traitsList,
+        questions: []
+    };
+
+    document.querySelectorAll('.question').forEach(qEl => {
+        const q = {
+            text: qEl.querySelector('.question-text').value,
+            image: (qEl.querySelector('.image-preview')?.src || ''),
+            answers: []
+        };
+
+        qEl.querySelectorAll('.answer').forEach(ansEl => {
+            const ansText = ansEl.querySelector('.answer-text').value;
+            const multiDropdown = ansEl.querySelector('.multi-dropdown');
+            const selectedTraits = Array.from(multiDropdown.querySelectorAll('.multi-dropdown__item.selected'))
+                .map(item => item.getAttribute('data-value'));
+
+            q.answers.push({
+                text: ansText,
+                traits: selectedTraits
+            });
+        });
+
+        draft.questions.push(q);
+    });
+
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+}
+
+// Загрузка черновика
+function loadDraft() {
+    const draft = JSON.parse(localStorage.getItem(DRAFT_KEY));
+    if (!draft) return false;
+
+    // Восстановление основного изображения
+    if (draft.mainImageBase64) {
+        mainImageBase64 = draft.mainImageBase64;
+        const container = document.getElementById('mainImage').closest('.image-upload');
+        const preview = document.createElement('img');
+        preview.className = 'image-preview';
+        preview.src = draft.mainImageBase64;
+        preview.style.display = 'block';
+
+        const previewContainer = document.createElement('div');
+        previewContainer.className = 'image-preview-container';
+        previewContainer.appendChild(preview);
+        container.appendChild(previewContainer);
+        addRemoveButton(previewContainer, document.getElementById('mainImage'));
+    }
+
+    // Восстановление заголовка
+    document.getElementById('testTitle').value = draft.title || '';
+
+    // Восстановление характеристик
+    traitsList = draft.traits || [];
+    const traitsDiv = document.getElementById('traits');
+    traitsDiv.innerHTML = '';
+    traitsList.forEach(traitName => {
+        const newTrait = document.createElement('div');
+        newTrait.className = 'trait';
+        newTrait.innerHTML = `
+            <input type="text" placeholder="Имя характеристики" 
+                   class="trait-name form-input" value="${traitName}">
+            <button class="btn btn-danger" onclick="removeElement(this)">
+                <span>×</span> Удалить
+            </button>`;
+        traitsDiv.appendChild(newTrait);
+
+        const inp = newTrait.querySelector('.trait-name');
+        inp.addEventListener('input', () => {
+            clearTimeout(inp.timeout);
+            inp.timeout = setTimeout(updateTraitOptions, 300);
+        });
+    });
+
+    // Восстановление вопросов
+    const questionsDiv = document.getElementById('questions');
+    questionsDiv.innerHTML = '';
+    draft.questions.forEach(qData => {
+        const newQ = document.createElement('div');
+        newQ.className = 'question';
+        newQ.innerHTML = `
+            <div class="image-upload">
+                <label class="file-upload">
+                    <input type="file" class="question-image" accept="image/*">
+                </label>
+            </div>
+            <input type="text" placeholder="Текст вопроса" 
+                   class="question-text form-input" value="${qData.text}">
+            <div class="answers"></div>
+            <div class="answer-actions">
+                <button class="btn btn-icon" onclick="addAnswer(this)">
+                    <span>+</span> Ответ
+                </button>
+                <button class="btn btn-danger" onclick="removeElement(this)">
+                    <span>×</span> Удалить вопрос
+                </button>
+            </div>`;
+
+        // Восстановление изображения вопроса
+        if (qData.image) {
+            const preview = document.createElement('img');
+            preview.className = 'image-preview';
+            preview.src = qData.image;
+            preview.style.display = 'block';
+
+            const previewContainer = document.createElement('div');
+            previewContainer.className = 'image-preview-container';
+            previewContainer.appendChild(preview);
+            newQ.querySelector('.image-upload').appendChild(previewContainer);
+            addRemoveButton(previewContainer, newQ.querySelector('.question-image'));
+        }
+
+        const answersDiv = newQ.querySelector('.answers');
+        qData.answers.forEach(ansData => {
+            const newAns = document.createElement('div');
+            newAns.className = 'answer';
+            newAns.innerHTML = `
+                <input type="text" placeholder="Ответ" 
+                       class="answer-text form-input" value="${ansData.text}">
+                <div class="multi-dropdown answer-dropdown"></div>
+                <button class="btn btn-danger" onclick="removeElement(this)">
+                    <span>×</span> Удалить ответ
+                </button>`;
+            answersDiv.appendChild(newAns);
+
+            // Инициализация дропдауна
+            const ddContainer = newAns.querySelector('.answer-dropdown');
+            createMultiDropdown(ddContainer);
+
+            // Восстановление выбранных характеристик
+            setTimeout(() => {
+                const wrapper = ddContainer.querySelector('.multi-dropdown');
+                if (wrapper) {
+                    wrapper._selectedTags = ansData.traits;
+                    wrapper._populateList();
+                    updateButtonText(wrapper);
+                }
+            }, 100);
+        });
+
+        questionsDiv.appendChild(newQ);
+    });
+    return true;
+}
+
+
+// Загрузка черновика при загрузке страницы
+document.addEventListener('DOMContentLoaded', () => {
+    const loaded = loadDraft();
+    if (loaded) {
+        console.log('Черновик восстановлен');
+    }
+
+    // Инициализация слушателей для автосохранения
+    document.getElementById('testTitle').addEventListener('input', scheduleAutoSave);
+    document.querySelector('#traits').addEventListener('input', scheduleAutoSave);
+    document.querySelector('#questions').addEventListener('input', scheduleAutoSave);
+});
