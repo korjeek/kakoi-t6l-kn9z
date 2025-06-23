@@ -2,13 +2,10 @@
 let currentQuestion = 0;
 let scores = {};
 
-// Загрузка состояния из localStorage
-// Загрузка состояния из localStorage с обработкой ошибок
 function loadState() {
     try {
         const savedState = localStorage.getItem('testProgress');
         if (savedState) {
-            // Проверяем, что данные являются валидным JSON
             if (savedState.startsWith('{') || savedState.startsWith('[')) {
                 return JSON.parse(savedState);
             }
@@ -21,26 +18,21 @@ function loadState() {
     return null;
 }
 
-// Обновлённая функция loadTest
 async function loadTest() {
-    // Загружаем состояние с обработкой ошибок
     const savedState = loadState();
 
     const configDataElement = document.getElementById('config-data');
     const testId = configDataElement.dataset.testId;
-
-    // Проверяем сохранённое состояние
+    
     if (savedState && savedState.testId && savedState.testId === testId) {
         currentQuestion = savedState.currentQuestion || 0;
         scores = savedState.scores || {};
     } else {
-        // Если тест другой или состояние невалидно - сбрасываем
         clearState();
         currentQuestion = 0;
         scores = {};
     }
-
-    // Загрузка теста с обработкой ошибок
+    
     try {
         const response = await fetch(`/tests/${testId}`);
         if (!response.ok) throw new Error('Тест не найден');
@@ -49,13 +41,11 @@ async function loadTest() {
         if (!currentTest || !currentTest.questions) {
             throw new Error('Неверный формат теста');
         }
-
-        // Инициализация scores для новых черт
+        
         currentTest.traits.forEach(trait => {
             scores[trait] = scores[trait] || 0;
         });
 
-        // Загрузка изображения
         if (currentTest.image) {
             document.getElementById('mainTestImage').src = currentTest.image;
         }
@@ -68,7 +58,6 @@ async function loadTest() {
     }
 }
 
-// Сохранение состояния с проверками
 function saveState() {
     try {
         const configDataElement = document.getElementById('config-data');
@@ -85,7 +74,6 @@ function saveState() {
     }
 }
 
-// Очистка состояния
 function clearState() {
     localStorage.removeItem('testProgress');
 }
@@ -93,8 +81,7 @@ function clearState() {
 function showQuestion(index) {
     const questions = currentTest.questions[index];
     document.getElementById('test-title').textContent = currentTest.title;
-
-    // Обновляем прогресс-бар
+    
     const progress = (index / currentTest.questions.length) * 100;
     document.getElementById('progress').style.width = `${progress}%`;
 
@@ -127,14 +114,14 @@ function selectAnswer(traitsString) {
     });
 
     currentQuestion++;
-    saveState(); // Сохраняем состояние после каждого ответа
+    saveState();
 
     if (currentQuestion < currentTest.questions.length) {
         showQuestion(currentQuestion);
     } else {
         document.getElementById('progress').style.width = '100%';
         showResult();
-        clearState(); // Очищаем после завершения теста
+        clearState();
     }
 }
 
@@ -153,8 +140,7 @@ function showResult() {
 
     const randomIndex = Math.floor(Math.random() * resultTraits.length);
     const result = resultTraits[randomIndex];
-
-    // Скрываем вопросы и показываем результат
+    
     const testContent = document.querySelector('.test-content');
     const resultElement = document.getElementById('result');
 

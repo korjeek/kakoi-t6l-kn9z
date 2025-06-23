@@ -38,5 +38,4 @@ function deleteTest(index) {
     loadTests();
 }
 
-// Загрузка тестов при открытии страницы
 window.onload = loadTests;
